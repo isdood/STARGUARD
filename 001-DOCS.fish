@@ -116,10 +116,17 @@ function create_doc_structure
     print_stellar "✧ Manifested API documentation interfaces" $nebula_pink
 
     # Create index files with enhanced styling
-    echo "# ✨ STARWEAVE Documentation\n\n> Weaving quantum protection into the fabric of computing\n" > docs/README.md
+    echo "# ✨ STARWEAVE Documentation
+
+> Weaving quantum protection into the fabric of computing
+" > docs/README.md
+
     for dir in $dirs
         set -l section_name (string split "/" $dir)[-1]
-        echo "# ✨ STARWEAVE - $section_name\n\n> Stellar documentation for quantum defense\n" > $dir/README.md
+        echo "# ✨ STARWEAVE - $section_name
+
+> Stellar documentation for quantum defense
+" > $dir/README.md
     end
     print_stellar "✧ Woven index constellation complete" $star_blue
 end
@@ -129,8 +136,7 @@ function create_doc_templates
     print_stellar "Creating stellar documentation templates..." $cosmic_gold
 
     # Architecture overview template
-    cat > docs/architecture/overview.md << 'EOL'
-# ✨ STARWEAVE Architecture Overview
+    echo "# ✨ STARWEAVE Architecture Overview
 
 > Weaving quantum protection through classical computing
 
@@ -149,13 +155,12 @@ the power of pattern recognition and quantum computing principles.
 ## ⭐ Integration Points
 - **STARWEB**: QR-Code-Coding integration
 - **SOUNDQR**: Metadata preservation system
-- **GLIMMER**: Performance optimization patterns
-EOL
+- **GLIMMER**: Performance optimization patterns" > docs/architecture/overview.md
+
     print_stellar "✧ Crafted architecture overview template" $stardust_cyan
 
     # Getting started guide template
-    cat > docs/guides/getting-started.md << 'EOL'
-# ✧･ﾟ: Getting Started with STARWEAVE :･ﾟ✧
+    echo "# ✧･ﾟ: Getting Started with STARWEAVE :･ﾟ✧
 
 > Your journey into quantum-aware system defense begins here
 
@@ -171,8 +176,8 @@ EOL
 (Usage examples will be added here)
 
 ## ⭐ Configuration
-(Configuration guidelines will be added here)
-EOL
+(Configuration guidelines will be added here)" > docs/guides/getting-started.md
+
     print_stellar "✧ Illuminated getting started guide template" $nebula_pink
 end
 
