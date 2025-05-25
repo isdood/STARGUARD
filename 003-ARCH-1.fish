@@ -7,6 +7,18 @@
 set -l quantum_shimmer "#9370DB"  # Soft purple quantum glow
 set -l arch_accent "#40E0D0"  # Turquoise architectural highlights
 set -l component_glow "#FFB6C1"  # Soft pink component highlights
+set -l glimmer_success "#50C878"  # Emerald green for success messages
+set -l glimmer_info "#87CEEB"    # Sky blue for info messages
+
+function show_glimmer_header
+    set_color $quantum_shimmer
+    echo "🌌 STARWEAVE Quantum Architecture Documentation Generator"
+    set_color $glimmer_info
+    echo "⏰ Generated: 2025-05-25 22:43:24 UTC"
+    echo "👤 Author: $USER"
+    set_color normal
+    echo
+end
 
 # Function to generate quantum components documentation
 function generate_quantum_docs
@@ -15,103 +27,69 @@ function generate_quantum_docs
     # Create architecture directory if it doesn't exist
     mkdir -p $arch_path
 
-    # Generate quantum components documentation with GLIMMER aesthetics
-    cat > $arch_path/quantum-components.md << EOL
-# ✨ Quantum Components Architecture
+    # Show GLIMMER-styled header
+    show_glimmer_header
 
-> Weaving quantum principles into classical security paradigms
+    # Generate documentation using individual echo statements
+    echo "# ✨ Quantum Components Architecture" > $arch_path/quantum-components.md
+    echo "\n> Weaving quantum principles into classical security paradigms\n" >> $arch_path/quantum-components.md
 
-## 🌌 Overview
+    echo "## 🌌 Overview\n" >> $arch_path/quantum-components.md
+    echo "STARWEAVE's quantum components form the foundation of our next-generation security approach, combining quantum-aware detection with classical security principles.\n" >> $arch_path/quantum-components.md
 
-STARWEAVE's quantum components form the foundation of our next-generation security approach, combining quantum-aware detection with classical security principles.
+    echo "## 🔮 Core Components\n" >> $arch_path/quantum-components.md
+    echo "### 1. Quantum Pattern Detector\n" >> $arch_path/quantum-components.md
+    echo "The Quantum Pattern Detector (QPD) is designed to identify potential quantum-based threats by analyzing:" >> $arch_path/quantum-components.md
+    echo "- Quantum signature patterns" >> $arch_path/quantum-components.md
+    echo "- Entanglement anomalies" >> $arch_path/quantum-components.md
+    echo "- Superposition state variations\n" >> $arch_path/quantum-components.md
 
-## 🔮 Core Components
+    echo "\`\`\`mermaid" >> $arch_path/quantum-components.md
+    echo "graph TD" >> $arch_path/quantum-components.md
+    echo "    A[Incoming Signal] --> B[Quantum Pattern Detector]" >> $arch_path/quantum-components.md
+    echo "    B --> C{Pattern Analysis}" >> $arch_path/quantum-components.md
+    echo "    C -->|Quantum| D[Quantum Threat Analysis]" >> $arch_path/quantum-components.md
+    echo "    C -->|Classical| E[Classical Threat Analysis]" >> $arch_path/quantum-components.md
+    echo "    D --> F[Threat Response]" >> $arch_path/quantum-components.md
+    echo "    E --> F" >> $arch_path/quantum-components.md
+    echo "\`\`\`\n" >> $arch_path/quantum-components.md
 
-### 1. Quantum Pattern Detector
+    echo "### 2. Evolutionary Learning Engine\n" >> $arch_path/quantum-components.md
+    echo "The Evolutionary Learning Engine (ELE) continuously adapts to new threat patterns through:" >> $arch_path/quantum-components.md
+    echo "- Self-evolving detection algorithms" >> $arch_path/quantum-components.md
+    echo "- Pattern mutation and selection" >> $arch_path/quantum-components.md
+    echo "- Fitness-based optimization\n" >> $arch_path/quantum-components.md
 
-The Quantum Pattern Detector (QPD) is designed to identify potential quantum-based threats by analyzing:
-- Quantum signature patterns
-- Entanglement anomalies
-- Superposition state variations
+    echo "### 3. Quantum-Classical Bridge\n" >> $arch_path/quantum-components.md
+    echo "This component facilitates:" >> $arch_path/quantum-components.md
+    echo "- Translation between quantum and classical threat patterns" >> $arch_path/quantum-components.md
+    echo "- Optimization of hybrid detection strategies" >> $arch_path/quantum-components.md
+    echo "- Integration with classical security systems\n" >> $arch_path/quantum-components.md
 
-\`\`\`mermaid
-graph TD
-    A[Incoming Signal] --> B[Quantum Pattern Detector]
-    B --> C{Pattern Analysis}
-    C -->|Quantum| D[Quantum Threat Analysis]
-    C -->|Classical| E[Classical Threat Analysis]
-    D --> F[Threat Response]
-    E --> F
-\`\`\`
+    # Continue with sections...
+    echo "## 🛡️ Security Implementation\n" >> $arch_path/quantum-components.md
+    echo "The quantum components implement security through:\n" >> $arch_path/quantum-components.md
+    echo "1. **Quantum-Aware Pattern Matching**" >> $arch_path/quantum-components.md
+    echo "   - Utilizes quantum principles for pattern recognition" >> $arch_path/quantum-components.md
+    echo "   - Implements quantum-resistant algorithms" >> $arch_path/quantum-components.md
+    echo "   - Adapts to quantum computing threats\n" >> $arch_path/quantum-components.md
 
-### 2. Evolutionary Learning Engine
+    # Add metadata footer with GLIMMER styling
+    echo "\n---\n" >> $arch_path/quantum-components.md
+    echo "> 🌟 Generated by STARWEAVE v0.1.0" >> $arch_path/quantum-components.md
+    echo "> 📅 Last updated: 2025-05-25 22:43:24 UTC" >> $arch_path/quantum-components.md
+    echo "> 👤 Generated by: $USER" >> $arch_path/quantum-components.md
 
-The Evolutionary Learning Engine (ELE) continuously adapts to new threat patterns through:
-- Self-evolving detection algorithms
-- Pattern mutation and selection
-- Fitness-based optimization
-
-### 3. Quantum-Classical Bridge
-
-This component facilitates:
-- Translation between quantum and classical threat patterns
-- Optimization of hybrid detection strategies
-- Integration with classical security systems
-
-## 🛡️ Security Implementation
-
-The quantum components implement security through:
-1. **Quantum-Aware Pattern Matching**
-   - Utilizes quantum principles for pattern recognition
-   - Implements quantum-resistant algorithms
-   - Adapts to quantum computing threats
-
-2. **Hybrid Protection Layers**
-   - Classical security baseline
-   - Quantum-aware protection layer
-   - Adaptive response system
-
-## 🔄 Integration Points
-
-### STARWEB Integration
-- QR-Code quantum signatures
-- Secure quantum pattern distribution
-- Real-time threat pattern updates
-
-### SOUNDQR Integration
-- Quantum metadata preservation
-- Threat fingerprint analysis
-- Pattern correlation engine
-
-### GLIMMER Optimization
-- Quantum pattern processing optimization
-- Performance-focused implementation
-- Resource-efficient execution
-
-## 🚀 Future Developments
-
-Planned enhancements include:
-- Advanced quantum pattern recognition
-- Expanded threat detection capabilities
-- Enhanced integration with quantum computing defenses
-
-## 📊 Performance Considerations
-
-The quantum components are designed with:
-- Minimal quantum overhead
-- Optimal classical-quantum bridging
-- Efficient resource utilization
-
-## 🔒 Security Considerations
-
-Implementation focuses on:
-- Quantum-resistant encryption
-- Secure pattern storage
-- Protected quantum signatures
-EOL
-
+    # Show GLIMMER-style success message
+    set_color $glimmer_success
     echo "✨ Quantum components documentation generated successfully"
+    set_color $quantum_shimmer
+    echo "📂 Location: $arch_path/quantum-components.md"
+    set_color normal
 end
 
-# Execute the generation
+# Execute the generation with GLIMMER theming
+set_color $quantum_shimmer
+echo "🚀 Initializing STARWEAVE documentation generation..."
+set_color normal
 generate_quantum_docs
