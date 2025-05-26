@@ -1,8 +1,10 @@
 //! ✨ GLIMMER Enhancement Framework
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 19:26:17 UTC
+//! Last Modified: 2025-05-26 19:34:29 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with quantum resonance
+
+const std = @import("std");  // Add missing import
 
 pub const OptimizationPattern = enum {
     quantum_init,      // 💫 Quantum initialization

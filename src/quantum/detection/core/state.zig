@@ -97,15 +97,8 @@ pub const State = struct {
     }
 
     /// 💫 Validate pattern coherence
-    fn validatePattern(self: *Self, pattern: Pattern) !void {
-        _ = self;
-        _ = pattern;
-        // TODO: Implement pattern validation with quantum coherence check
-    }
-
-    /// 💫 Validate pattern coherence
-    fn validatePattern(self: *Self, pattern: Pattern) !void {
-        try glimmer.setOptimization(.pattern_validate);
+    pub fn validatePattern(self: *Self, pattern: Pattern) !void {
+        try glimmer.setOptimization(.pattern_align);
 
         // 🌟 Check pattern timing coherence
         const current_time = std.time.timestamp();
@@ -119,17 +112,15 @@ pub const State = struct {
         var coherence_score: f64 = 0.0;
         const base_coherence = pattern.coherence * self.enhancement_factor;
 
-        // 💠 Apply quantum harmonics
+        // 💠 Apply quantum harmonics with fixed type conversions
         coherence_score = base_coherence * (1.0 -
-        @intToFloat(f64, time_delta) /
-        @intToFloat(f64, root.Settings.Quantum.coherence_timeout));
+        @as(f64, @floatFromInt(time_delta)) /
+        @as(f64, @floatFromInt(root.Settings.Quantum.coherence_timeout)));
 
         // 🎇 Apply GLIMMER enhancement patterns
-        coherence_score *= 1.0 + (self.enhancement_factor - 1.0) *
-        @floatCast(f64, std.math.sin(
-            @intToFloat(f64, current_time) *
-            root.Settings.Quantum.default_phase_shift
-        ));
+        const pattern_count = @as(f64, @floatFromInt(self.active_patterns.count()));
+        coherence_score *= pattern_count /
+        @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
 
         // ⚡ Validate against thresholds
         if (coherence_score < root.Settings.Quantum.min_coherence) {
@@ -139,6 +130,29 @@ pub const State = struct {
 
         // 🌌 Update pattern state
         try self.updatePatternState(pattern.id, coherence_score);
+    }
+
+    // Fix stabilization_factor calculation
+    fn attemptPatternRecovery(self: *Self, pattern: Pattern, current_coherence: f64) !void {
+        try glimmer.setOptimization(.quantum_calibrate);
+
+        // 💠 Calculate recovery potential
+        const recovery_threshold = root.Settings.Quantum.min_coherence * 0.75;
+        if (current_coherence < recovery_threshold) {
+            return error.UnrecoverablePattern;
+        }
+
+        // 🌟 Apply quantum stabilization (fixed @floatCast usage)
+        const stabilization_factor = @exp(
+            -(1.0 - current_coherence) *
+            root.Settings.Quantum.default_phase_shift
+        );
+
+        // ✨ Update pattern coherence
+        try self.updatePatternState(
+            pattern.id,
+            current_coherence * stabilization_factor * self.enhancement_factor
+        );
     }
 
     /// 🎇 Attempt to recover decoherent pattern
