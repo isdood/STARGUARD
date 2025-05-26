@@ -44,7 +44,7 @@ pub const Enhancement = struct {
         // 🎇 Quantum enhancement calculation
         const base_factor = 1.618033988749895; // Golden ratio
         const quantum_coefficient = 1.0 + @sin(
-            @intToFloat(f64, std.time.timestamp()) *
+            @as(f64, @floatFromInt(std.time.timestamp())) *
             std.math.pi / 180.0
         ) * 0.1;
 
