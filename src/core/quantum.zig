@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Core
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:29:22 UTC
+//! Last Modified: 2025-05-26 13:30:53 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
@@ -15,37 +15,48 @@ pub const State = struct {
     entangle_manager: *entangle.EntanglementManager,
 
     pub fn init(allocator: std.mem.Allocator) !State {
-        // 💫 Initialize quantum state first
-        var quantum_state_instance = try quantum_state.QuantumState.init(allocator);
-        errdefer quantum_state_instance.deinit();
+        // 💠 Initialize quantum state with proper memory allocation
+        var state_instance = try allocator.create(quantum_state.QuantumState);
+        errdefer allocator.destroy(state_instance);
+        state_instance.* = try quantum_state.QuantumState.init(allocator);
+        errdefer state_instance.deinit();
 
-        // ✨ Initialize entanglement manager with quantum state
-        var entangle_manager_instance = try entangle.EntanglementManager.init(
+        // 🌟 Initialize entanglement manager with quantum state pointer
+        var entangle_instance = try allocator.create(entangle.EntanglementManager);
+        errdefer allocator.destroy(entangle_instance);
+        entangle_instance.* = try entangle.EntanglementManager.init(
             allocator,
-            quantum_state_instance
+            state_instance
         );
-        errdefer entangle_manager_instance.deinit();
+        errdefer entangle_instance.deinit();
 
-        // 🌟 Initialize quantum ops with both dependencies
-        var quantum_ops_instance = try quantum_ops.QuantumOps.init(
+        // ✨ Initialize quantum ops with both dependency pointers
+        var ops_instance = try allocator.create(quantum_ops.QuantumOps);
+        errdefer allocator.destroy(ops_instance);
+        ops_instance.* = try quantum_ops.QuantumOps.init(
             allocator,
-            quantum_state_instance,
-            entangle_manager_instance
+            state_instance,
+            entangle_instance
         );
-        errdefer quantum_ops_instance.deinit();
+        errdefer ops_instance.deinit();
 
         // 🎇 Return fully initialized state with GLIMMER enhancement
         return State{
-            .state = quantum_state_instance,
-            .ops = quantum_ops_instance,
-            .entangle_manager = entangle_manager_instance,
+            .state = state_instance,
+            .ops = ops_instance,
+            .entangle_manager = entangle_instance,
         };
     }
 
     pub fn deinit(self: *State) void {
-        // 💠 Clean up in reverse initialization order
+        // 💫 Clean up in reverse initialization order with proper memory management
         self.ops.deinit();
+        self.allocator.destroy(self.ops);
+
         self.entangle_manager.deinit();
+        self.allocator.destroy(self.entangle_manager);
+
         self.state.deinit();
+        self.allocator.destroy(self.state);
     }
 };
