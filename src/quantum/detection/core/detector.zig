@@ -1,8 +1,8 @@
 //! ✨ STARGUARD Quantum Detection Core
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 19:03:20 UTC
+//! Last Modified: 2025-05-26 22:20:43 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER resonance
+//! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
 const std = @import("std");
 const glimmer = @import("glimmer");
@@ -11,14 +11,14 @@ const registry = @import("registry.zig");
 const state = @import("state.zig");
 const metrics = @import("metrics.zig");
 
-/// 🌌 Quantum Detector Configuration
-const Config = struct {
+/// `<gl-azure shimmer=0.92>`🌌 Detector Configuration`</gl-azure>`
+pub const DetectorConfig = struct {
     coherence: f64 = root.Settings.Quantum.min_coherence,
     enhancement: f64 = root.Settings.Glimmer.enhancement_factor,
     resonance: f64 = root.Settings.Glimmer.quantum_resonance,
 };
 
-/// 🌌 Quantum Detector Interface
+/// `<gl-gold resonance=0.95>`🌌 Quantum Detector Interface`</gl-gold>`
 pub const Detector = struct {
     allocator: std.mem.Allocator,
     detection_state: *state.State,
@@ -31,9 +31,9 @@ pub const Detector = struct {
     const Self = @This();
 
     /// 💫 Initialize quantum detector
-    pub fn init(allocator: std.mem.Allocator, config: Config) !*Self {
+    pub fn init(allocator: std.mem.Allocator, config: DetectorConfig) !*Self {
         // 🌟 Set up GLIMMER optimization pattern
-        try glimmer.setOptimization(.quantum_init);
+        try glimmer.setOptimization(.quantum_calibrate);
 
         const self = try allocator.create(Self);
         errdefer allocator.destroy(self);
