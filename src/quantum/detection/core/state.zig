@@ -62,11 +62,12 @@ pub const State = struct {
             total_coherence += coherence * self.enhancement_factor;
         }
 
-        // ✨ Apply quantum harmonics with proper syntax
-        return total_coherence *
-        (1.0 + (self.enhancement_factor - 1.0) *
-        @as(f64, @floatFromInt(pattern_count)) /
-        @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement)));
+        // ✨ Apply quantum harmonics with corrected type conversion
+        const max_entanglement = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
+        const pattern_count_f64 = @as(f64, @floatFromInt(pattern_count));
+
+        return total_coherence * (1.0 + (self.enhancement_factor - 1.0) *
+        pattern_count_f64 / max_entanglement);
     }
 
         // ✨ Apply GLIMMER enhancement
