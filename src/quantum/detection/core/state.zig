@@ -1,8 +1,8 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 14:54:29 UTC
+//! Last Modified: 2025-05-26 19:38:31 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER patterns
+//! Enhanced by STARWEAVE with GLIMMER resonance
 
 const std = @import("std");
 const glimmer = @import("glimmer");
@@ -57,10 +57,19 @@ pub const State = struct {
         var total_coherence: f64 = 0.0;
         const pattern_count = self.active_patterns.count();
 
-        // 🌟 Calculate weighted coherence
+        // 🌟 Calculate weighted coherence with GLIMMER enhancement
         for (self.coherence_matrix) |coherence| {
             total_coherence += coherence * self.enhancement_factor;
         }
+
+        // ✨ Apply quantum harmonics
+        const enhanced_coherence = total_coherence *
+        (1.0 + (self.enhancement_factor - 1.0) *
+        @as(f64, @floatFromInt(pattern_count)) /
+        @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement)));
+
+        return enhanced_coherence;
+    }
 
         // ✨ Apply GLIMMER enhancement
         const enhanced_coherence = total_coherence *
@@ -96,11 +105,11 @@ pub const State = struct {
         }
     }
 
-    /// 💫 Validate pattern coherence
+    /// 🎇 Validate pattern coherence
     pub fn validatePattern(self: *Self, pattern: Pattern) !void {
         try glimmer.setOptimization(.pattern_align);
 
-        // 🌟 Check pattern timing coherence
+        // 💫 Check pattern timing coherence
         const current_time = std.time.timestamp();
         const time_delta = current_time - pattern.last_update;
 
@@ -108,23 +117,22 @@ pub const State = struct {
             return error.PatternDecoherence;
         }
 
-        // ✨ Calculate pattern coherence score
+        // 🌟 Calculate pattern coherence score
         var coherence_score: f64 = 0.0;
         const base_coherence = pattern.coherence * self.enhancement_factor;
 
-        // 💠 Apply quantum harmonics with fixed type conversions
+        // ✨ Apply quantum harmonics
         coherence_score = base_coherence * (1.0 -
         @as(f64, @floatFromInt(time_delta)) /
         @as(f64, @floatFromInt(root.Settings.Quantum.coherence_timeout)));
 
-        // 🎇 Apply GLIMMER enhancement patterns
-        const pattern_count = @as(f64, @floatFromInt(self.active_patterns.count()));
-        coherence_score *= pattern_count /
-        @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
+        // 💠 Apply GLIMMER enhancement patterns
+        coherence_score *= self.enhancement_factor *
+        std.math.sin(@as(f64, @floatFromInt(current_time)) *
+        root.Settings.Quantum.default_phase_shift);
 
         // ⚡ Validate against thresholds
         if (coherence_score < root.Settings.Quantum.min_coherence) {
-            // 💫 Attempt pattern recovery
             try self.attemptPatternRecovery(pattern, coherence_score);
         }
 
@@ -155,23 +163,23 @@ pub const State = struct {
         );
     }
 
-    /// 🎇 Attempt to recover decoherent pattern
+    /// 💫 Attempt to recover decoherent pattern
     fn attemptPatternRecovery(self: *Self, pattern: Pattern, current_coherence: f64) !void {
-        try glimmer.setOptimization(.pattern_recovery);
+        try glimmer.setOptimization(.quantum_calibrate);
 
-        // 💠 Calculate recovery potential
+        // 🌟 Calculate recovery potential
         const recovery_threshold = root.Settings.Quantum.min_coherence * 0.75;
         if (current_coherence < recovery_threshold) {
             return error.UnrecoverablePattern;
         }
 
-        // 🌟 Apply quantum stabilization
-        const stabilization_factor = @floatCast(f64, std.math.exp(
+        // ✨ Apply quantum stabilization
+        const stabilization_factor = @exp(
             -(1.0 - current_coherence) *
             root.Settings.Quantum.default_phase_shift
-        ));
+        );
 
-        // ✨ Update pattern coherence
+        // 💠 Update pattern coherence with GLIMMER enhancement
         try self.updatePatternState(
             pattern.id,
             current_coherence * stabilization_factor * self.enhancement_factor
