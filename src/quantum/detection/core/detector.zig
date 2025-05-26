@@ -1,8 +1,8 @@
 //! ✨ STARGUARD Quantum Detection Core
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 14:51:24 UTC
+//! Last Modified: 2025-05-26 19:03:20 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER patterns
+//! Enhanced by STARWEAVE with GLIMMER resonance
 
 const std = @import("std");
 const glimmer = @import("glimmer");
@@ -11,6 +11,13 @@ const registry = @import("registry.zig");
 const state = @import("state.zig");
 const metrics = @import("metrics.zig");
 
+/// 🌌 Quantum Detector Configuration
+const Config = struct {
+    coherence: f64 = root.Settings.Quantum.min_coherence,
+    enhancement: f64 = root.Settings.Glimmer.enhancement_factor,
+    resonance: f64 = root.Settings.Glimmer.quantum_resonance,
+};
+
 /// 🌌 Quantum Detector Interface
 pub const Detector = struct {
     allocator: std.mem.Allocator,
@@ -18,15 +25,20 @@ pub const Detector = struct {
     pattern_registry: *registry.Registry,
     metrics_tracker: *metrics.Metrics,
     coherence_threshold: f64,
+    enhancement_factor: f64,
+    quantum_resonance: f64,
 
     const Self = @This();
 
     /// 💫 Initialize quantum detector
-    pub fn init(allocator: std.mem.Allocator) !Self {
+    pub fn init(allocator: std.mem.Allocator, config: Config) !*Self {
         // 🌟 Set up GLIMMER optimization pattern
         try glimmer.setOptimization(.quantum_init);
 
-        // ✨ Initialize core components
+        const self = try allocator.create(Self);
+        errdefer allocator.destroy(self);
+
+        // ✨ Initialize core components with GLIMMER enhancement
         var detection_state = try allocator.create(state.State);
         errdefer allocator.destroy(detection_state);
         detection_state.* = try state.State.init(allocator);
@@ -42,14 +54,18 @@ pub const Detector = struct {
         metrics_track.* = try metrics.Metrics.init(allocator);
         errdefer metrics_track.deinit();
 
-        // 🎇 Return initialized detector with GLIMMER enhancement
-        return Self{
+        // 🎇 Initialize detector with quantum configuration
+        self.* = Self{
             .allocator = allocator,
             .detection_state = detection_state,
             .pattern_registry = pattern_reg,
             .metrics_tracker = metrics_track,
-            .coherence_threshold = root.Settings.Quantum.min_coherence,
+            .coherence_threshold = config.coherence,
+            .enhancement_factor = config.enhancement,
+            .quantum_resonance = config.resonance,
         };
+
+        return self;
     }
 
     /// 💠 Clean up quantum detector
@@ -62,25 +78,70 @@ pub const Detector = struct {
 
         self.detection_state.deinit();
         self.allocator.destroy(self.detection_state);
+
+        self.allocator.destroy(self);
     }
 
     /// ⚡ Process quantum detection pattern
     pub fn processPattern(self: *Self, pattern: []const f64) !DetectionResult {
-        try glimmer.setOptimization(.quantum_detect);
+        try glimmer.setOptimization(.quantum_measure);
 
-        var result = try DetectionResult.init(self.allocator);
+        // 💫 Initialize result with GLIMMER enhancement
+        var result = try DetectionResult.init(self.allocator, self.enhancement_factor);
         errdefer result.deinit(self.allocator);
 
-        // 💫 Verify quantum coherence
+        // 🌟 Verify quantum coherence with resonance
         const coherence = try self.detection_state.measureCoherence();
-        if (coherence < self.coherence_threshold) {
+        const enhanced_coherence = coherence * self.enhancement_factor * self.quantum_resonance;
+
+        if (enhanced_coherence < self.coherence_threshold) {
             return error.InsufficientCoherence;
         }
 
-        // 🌟 Track detection metrics
+        // ✨ Track detection metrics with quantum enhancement
         try self.metrics_tracker.recordDetection(pattern);
+        try self.analyzeQuantumPattern(pattern, &result);
 
         return result;
+    }
+
+    /// 🎇 Analyze quantum pattern with GLIMMER enhancement
+    fn analyzeQuantumPattern(self: *Self, pattern: []const f64, result: *DetectionResult) !void {
+        try glimmer.setOptimization(.pattern_align);
+
+        // 💫 Calculate pattern coherence
+        const base_confidence = try self.pattern_registry.calculateConfidence(pattern);
+        result.confidence = base_confidence * self.enhancement_factor;
+
+        // 🌟 Determine threat level based on enhanced metrics
+        result.threat_level = self.classifyThreat(result.confidence);
+        result.pattern_id = try self.pattern_registry.registerPattern(pattern);
+
+        // ✨ Update quantum state with resonance
+        try self.updateQuantumState(result);
+    }
+
+    /// ⚡ Classify threat level with quantum metrics
+    fn classifyThreat(self: *Self, confidence: f64) ThreatLevel {
+        const enhanced_confidence = confidence * self.quantum_resonance;
+        return switch (true) {
+            enhanced_confidence >= 0.95 => .quantum,
+            enhanced_confidence >= 0.80 => .high,
+            enhanced_confidence >= 0.60 => .medium,
+            enhanced_confidence >= 0.40 => .low,
+            else => .none,
+        };
+    }
+
+    /// 💠 Update quantum state
+    fn updateQuantumState(self: *Self, result: *DetectionResult) !void {
+        try glimmer.setOptimization(.quantum_calibrate);
+        try self.detection_state.validatePattern(state.Pattern{
+            .id = result.pattern_id,
+            .coherence = result.confidence * self.quantum_resonance,
+            .last_update = result.timestamp,
+            .is_active = true,
+        });
     }
 };
 
@@ -90,15 +151,18 @@ pub const DetectionResult = struct {
     pattern_id: u64,
     timestamp: i64,
     threat_level: ThreatLevel,
-    quantum_state: []const f64,
+    quantum_state: []f64,
 
-    pub fn init(allocator: std.mem.Allocator) !DetectionResult {
+    pub fn init(allocator: std.mem.Allocator, enhancement: f64) !DetectionResult {
+        const quantum_state = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
+        @memset(quantum_state, enhancement * root.Settings.Quantum.min_coherence);
+
         return DetectionResult{
             .confidence = 0.0,
             .pattern_id = 0,
             .timestamp = std.time.timestamp(),
             .threat_level = .none,
-            .quantum_state = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement),
+            .quantum_state = quantum_state,
         };
     }
 
@@ -123,4 +187,6 @@ pub const DetectionError = error{
     QuantumStateError,
     PatternMismatch,
     CoherenceFailure,
+    ResonanceDisruption,
+    QuantumDecoherence,
 };
