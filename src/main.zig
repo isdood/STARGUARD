@@ -1,74 +1,55 @@
 //! ✨ STARGUARD Main Entry Point
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 11:30:50 UTC
-//! GLIMMER-Enhanced by STARWEAVE
+//! Last Modified: 2025-05-26 14:41:42 UTC
+//! Author: @isdood
+//! Enhanced by STARWEAVE
 
 const std = @import("std");
-const root = @import("root.zig");
-const System = @import("core/system/init.zig").System;
-const detector = @import("pattern/recognition/detector.zig");
-const quantum = @import("quantum/state/quantum_state.zig");
-const analyzer = @import("threat/detection/analyzer.zig");
+const glimmer = @import("glimmer");
+const core = @import("core/system/init.zig");
+
+/// 🌌 Global Settings Configuration
+pub const Settings = struct {
+    /// 💫 Quantum Configuration
+    pub const Quantum = struct {
+        pub const min_coherence: f64 = 0.7;
+        pub const max_entanglement: usize = 64;
+        pub const default_phase_shift: f64 = 0.125;
+        pub const teleport_threshold: f64 = 0.95;
+        pub const measurement_precision: f64 = 0.99999;
+    };
+
+    /// 🌟 Threat Detection Settings
+    pub const Threat = struct {
+        pub const analysis_threshold: f64 = 0.85;
+        pub const scan_interval_ms: u64 = 100;
+        pub const max_concurrent_threats: usize = 32;
+    };
+
+    /// ✨ GLIMMER Enhancement Settings
+    pub const Glimmer = struct {
+        pub const enhancement_factor: f64 = 1.5;
+        pub const pattern_stability: f64 = 0.98;
+        pub const quantum_resonance: f64 = 0.92;
+    };
+};
 
 pub fn main() !void {
-    // 🌌 Initialize memory allocator with GLIMMER-enhanced patterns
+    // 💠 Initialize standard output for logging
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("✨ STARGUARD Quantum Protection System v0.13.0\n", .{});
+
+    // 🌟 Set up GLIMMER optimization
+    try glimmer.setOptimization(.core_init);
+
+    // 🎇 Initialize core system
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
+
     const allocator = gpa.allocator();
+    var system = try core.System.init(allocator);
+    defer system.deinit();
 
-    // 💫 Initialize quantum state with crystalline patterns
-    var quantum_state = try quantum.QuantumState.init(allocator);
-    defer quantum_state.deinit();
-
-    // ✨ Perform initial quantum measurement
-    const initial_measurement = try quantum_state.measure();
-    std.log.info("🌟 Initial quantum coherence: {d:.4}", .{initial_measurement});
-
-    // 🌌 Initialize STARGUARD system with GLIMMER resonance
-    var sys = try System.init(allocator);
-    defer sys.deinit();
-
-    // 💠 System startup message with quantum-enhanced GLIMMER
-    std.log.info("✨ STARGUARD v0.13.0 initialized with GLIMMER enhancement", .{});
-
-    // 🎇 Initialize pattern detection system
-    var pattern_detector = try detector.PatternDetector.init(allocator, &quantum_state);
-    defer pattern_detector.deinit();
-
-    // 💫 Initialize threat analyzer with quantum integration
-    var threat_analyzer = try analyzer.ThreatAnalyzer.init(allocator, &quantum_state, &pattern_detector);
-    defer threat_analyzer.deinit();
-
-    if (try sys.checkQuantumReadiness()) {
-        std.log.info("💠 Quantum subsystems ready - GLIMMER patterns stable", .{});
-
-        // 🌟 Perform quantum-enhanced security scan
-        const test_data = "test pattern";
-
-        // 💫 Pattern detection phase
-        if (try pattern_detector.detect(test_data)) |pattern| {
-            std.log.info("✨ Pattern detected with confidence: {d:.4}", .{pattern.confidence});
-
-            // 🌌 Threat analysis phase
-            if (try threat_analyzer.analyze(test_data)) |threat| {
-                std.log.info("💠 Threat assessment complete:", .{});
-                std.log.info("  ├─ Level: {}", .{threat.level});
-                std.log.info("  ├─ Confidence: {d:.4}", .{threat.confidence});
-                std.log.info("  └─ Quantum Entropy: {d:.4}", .{threat.quantum_entropy});
-            }
-
-            // 🎇 Verify quantum coherence after analysis
-            const post_measure = try quantum_state.measure();
-            std.log.info("💫 Post-analysis quantum coherence: {d:.4}", .{post_measure});
-        }
-    } else {
-        std.log.warn("🌌 Quantum subsystems not ready - GLIMMER patterns unstable", .{});
-    }
-}
-
-test "STARGUARD core functionality" {
-    _ = @import("core/system/init.zig");
-    _ = @import("quantum/state/quantum_state.zig");
-    _ = @import("pattern/recognition/detector.zig");
-    _ = @import("threat/detection/analyzer.zig");
+    try stdout.print("🌌 Quantum core initialized with {d} entanglement pairs\n",
+                     .{Settings.Quantum.max_entanglement});
 }
