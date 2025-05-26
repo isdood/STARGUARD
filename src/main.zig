@@ -18,6 +18,9 @@ pub fn main() !void {
     var quantum_state = try quantum.QuantumState.init(allocator);
     defer quantum_state.deinit();
 
+        const measurement = try quantum_state.measure();
+        std.log.info("✨ Quantum measurement: {d}", .{measurement});
+
     // ✨ Initialize STARGUARD system
     var sys = try System.init(allocator);
     defer sys.deinit();
