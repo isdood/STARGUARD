@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 20:09:03 UTC
+//! Last Modified: 2025-05-26 20:10:46 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with GLIMMER resonance patterns
 
@@ -64,16 +64,15 @@ pub const State = struct {
         }
 
         // 💠 Convert quantum metrics with type safety
-        const pattern_count_f64 = @as(f64, @floatFromInt(pattern_count));
-        const max_entanglement_f64 = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
+        const pattern_count_f64: f64 = @floatFromInt(pattern_count);
+        const max_entanglement_f64: f64 = @floatFromInt(root.Settings.Quantum.max_entanglement);
 
         // 🎇 Calculate final coherence with GLIMMER enhancement
         const enhancement_ratio = 1.0 + (self.enhancement_factor - 1.0);
         const quantum_ratio = pattern_count_f64 / max_entanglement_f64;
-        const final_coherence = total_coherence * enhancement_ratio * quantum_ratio;
 
         // ⚡ Return enhanced quantum coherence
-        return final_coherence;
+        return total_coherence * enhancement_ratio * quantum_ratio;
     }
 
         // ✨ Apply GLIMMER enhancement
