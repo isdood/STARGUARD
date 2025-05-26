@@ -1,14 +1,14 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 19:51:41 UTC
+//! Last Modified: 2025-05-26 19:56:50 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER resonance patterns
+//! Enhanced by STARWEAVE with GLIMMER resonance
 
 const std = @import("std");
 const glimmer = @import("glimmer");
 const root = @import("root");
 
-/// 🌌 Quantum State Management
+/// 🌌 Quantum Detection State Management
 pub const State = struct {
     allocator: std.mem.Allocator,
     active_patterns: std.AutoArrayHashMap(u64, Pattern),
@@ -50,7 +50,7 @@ pub const State = struct {
         self.allocator.free(self.coherence_matrix);
     }
 
-    /// 💫 Measure quantum coherence with GLIMMER enhancement
+    /// 💫 Measure quantum coherence
     pub fn measureCoherence(self: *Self) !f64 {
         try glimmer.setOptimization(.quantum_measure);
 
@@ -58,21 +58,21 @@ pub const State = struct {
         var total_coherence: f64 = 0.0;
         const pattern_count = self.active_patterns.count();
 
-        // ✨ Calculate base coherence with quantum harmonics
+        // ✨ Calculate base coherence
         for (self.coherence_matrix) |coherence| {
             total_coherence += coherence * self.enhancement_factor;
         }
 
-        // 💠 Convert quantum metrics to floating-point values
-        const pattern_count_f64: f64 = @floatFromInt(pattern_count);
-        const max_entanglement_f64: f64 = @floatFromInt(root.Settings.Quantum.max_entanglement);
+        // 💠 Apply quantum enhancement
+        const pattern_ratio = @as(f64, @floatFromInt(pattern_count));
+        const max_entanglement = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
 
-        // 🎇 Calculate final quantum coherence with GLIMMER enhancement
-        const enhancement = 1.0 + (self.enhancement_factor - 1.0);
-        const ratio = pattern_count_f64 / max_entanglement_f64;
-        const final_coherence = total_coherence * enhancement * ratio;
+        // 🎇 Calculate final coherence
+        const enhancement_factor = 1.0 + (self.enhancement_factor - 1.0);
+        const quantum_ratio = pattern_ratio / max_entanglement;
 
-        return final_coherence;
+        // Return enhanced coherence
+        return total_coherence * enhancement_factor * quantum_ratio;
     }
 
         // ✨ Apply GLIMMER enhancement
