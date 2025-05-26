@@ -82,7 +82,7 @@ pub const ThreatAnalyzer = struct {
 
         // Detect patterns in the data
         if (try self.pattern_detector.detect(data)) |pattern| {
-            var threat_info = try self.assessThreat(data, pattern, quantum_measure);
+            const threat_info = try self.assessThreat(data, pattern, quantum_measure);
 
             // Cache the threat information
             const hash = try self.calculateThreatHash(data);

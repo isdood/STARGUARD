@@ -63,7 +63,7 @@ pub const PatternDetector = struct {
         }
 
         // Perform quantum-enhanced pattern analysis
-        var pattern = try self.analyzePattern(data, hash);
+        const pattern = try self.analyzePattern(data, hash);
         try self.pattern_cache.put(hash, pattern);
 
         std.log.info("💫 New pattern detected and cached", .{});
@@ -80,6 +80,7 @@ pub const PatternDetector = struct {
 
     /// Analyze data for pattern recognition with quantum weighting
     fn analyzePattern(self: *Self, data: []const u8, hash: u64) !Pattern {
+        _ = hash; // TODO: Use hash in pattern analysis
         var signature: [32]u8 = undefined;
         _ = try self.quantum_state.analyze(data, &signature);
 

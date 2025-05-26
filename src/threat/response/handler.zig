@@ -118,12 +118,6 @@ pub const ResponseHandler = struct {
     /// 🌟 Monitor threat activity
     fn monitorThreat(self: *Self, response: *Response) !void {
         _ = self;
-        if (response.confidence > self.response_threshold) {
-            response.status = .successful;
-            std.log.info("💠 Monitoring threat ID: {}", .{response.threat_id});
-        } else {
-            response.status = .failed;
-        }
     }
 
     /// 💠 Isolate identified threat

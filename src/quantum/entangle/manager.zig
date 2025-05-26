@@ -54,7 +54,7 @@ pub const EntanglementManager = struct {
         try glimmer.setOptimization(.entangle_init);
 
         const max_pairs = root.Settings.Quantum.max_entanglement;
-        var coherence_matrix = try allocator.alloc(f64, max_pairs * max_pairs);
+        const coherence_matrix = try allocator.alloc(f64, max_pairs * max_pairs);
         errdefer allocator.free(coherence_matrix);
 
         // Initialize coherence matrix with identity values

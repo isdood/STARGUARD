@@ -27,7 +27,7 @@ pub const QuantumState = struct {
         try glimmer.setOptimization(.quantum_init);
 
         // Initialize state vector with quantum superposition
-        var state_vector = try allocator.alloc(f64, 1 << max_qubits);
+        const state_vector = try allocator.alloc(f64, 1 << max_qubits);
         errdefer allocator.free(state_vector);
 
         // Set initial quantum state
