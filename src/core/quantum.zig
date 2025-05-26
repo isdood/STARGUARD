@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Core
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:30:53 UTC
+//! Last Modified: 2025-05-26 14:43:35 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
@@ -10,18 +10,19 @@ const quantum_ops = @import("../quantum/algorithms/quantum_ops.zig");
 const entangle = @import("../quantum/entangle/manager.zig");
 
 pub const State = struct {
+    allocator: std.mem.Allocator,  // 💫 Added allocator field
     state: *quantum_state.QuantumState,
     ops: *quantum_ops.QuantumOps,
     entangle_manager: *entangle.EntanglementManager,
 
     pub fn init(allocator: std.mem.Allocator) !State {
-        // 💠 Initialize quantum state with proper memory allocation
+        // 🌟 Initialize quantum state with proper memory allocation
         var state_instance = try allocator.create(quantum_state.QuantumState);
         errdefer allocator.destroy(state_instance);
         state_instance.* = try quantum_state.QuantumState.init(allocator);
         errdefer state_instance.deinit();
 
-        // 🌟 Initialize entanglement manager with quantum state pointer
+        // ✨ Initialize entanglement manager with quantum state pointer
         var entangle_instance = try allocator.create(entangle.EntanglementManager);
         errdefer allocator.destroy(entangle_instance);
         entangle_instance.* = try entangle.EntanglementManager.init(
@@ -30,7 +31,7 @@ pub const State = struct {
         );
         errdefer entangle_instance.deinit();
 
-        // ✨ Initialize quantum ops with both dependency pointers
+        // 💠 Initialize quantum ops with both dependency pointers
         var ops_instance = try allocator.create(quantum_ops.QuantumOps);
         errdefer allocator.destroy(ops_instance);
         ops_instance.* = try quantum_ops.QuantumOps.init(
@@ -42,6 +43,7 @@ pub const State = struct {
 
         // 🎇 Return fully initialized state with GLIMMER enhancement
         return State{
+            .allocator = allocator,
             .state = state_instance,
             .ops = ops_instance,
             .entangle_manager = entangle_instance,
@@ -49,7 +51,7 @@ pub const State = struct {
     }
 
     pub fn deinit(self: *State) void {
-        // 💫 Clean up in reverse initialization order with proper memory management
+        // 💫 Clean up in reverse initialization order
         self.ops.deinit();
         self.allocator.destroy(self.ops);
 
