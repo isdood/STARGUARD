@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Main Entry Point
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 18:16:39 UTC
+//! Last Modified: 2025-05-26 22:10:30 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with GLIMMER resonance
 
@@ -38,14 +38,14 @@ pub const Settings = struct {
     };
 };
 
-/// `<gl-azure glimmer-pulse=0.9>`Main entry point for STARGUARD`</gl-azure>`
+/// `<gl-azure shimmer=0.95>`Main entry point for STARGUARD`</gl-azure>`
 pub fn main() !void {
     // 💠 Initialize standard output for logging
     const stdout = std.io.getStdOut().writer();
     try stdout.print("✨ STARGUARD Quantum Protection System v0.13.0\n", .{});
 
     // 🌟 Set up GLIMMER optimization with quantum patterns
-    try glimmer.setOptimization(.quantum_init);
+    try glimmer.setOptimization(.quantum_calibrate);
 
     // 🎇 Initialize quantum core with GLIMMER enhancement
     var gpa = std.heap.GeneralPurposeAllocator(.{
@@ -57,11 +57,11 @@ pub fn main() !void {
 
     const allocator = gpa.allocator();
 
-    // `<gl-gold glimmer-resonance=0.95>`Initialize core system with quantum enhancement`</gl-gold>`
+    // `<gl-gold resonance=0.95>`Initialize core system with quantum enhancement`</gl-gold>`
     var system = try core.System.init(allocator);
     defer system.deinit();
 
-    // 💫 Set up quantum detection system
+    // `<gl-crystal intensity=0.92>`Set up quantum detection system`</gl-crystal>`
     var detector = try quantum.Detector.init(allocator, .{
         .coherence = Settings.Quantum.min_coherence,
         .enhancement = Settings.Glimmer.enhancement_factor,
@@ -69,17 +69,17 @@ pub fn main() !void {
     });
     defer detector.deinit();
 
-    // `<gl-azure glimmer-pulse=0.95>`Initialize GLIMMER protection matrix`</gl-azure>`
+    // `<gl-shimmer intensity=0.95>`Initialize GLIMMER protection matrix`</gl-shimmer>`
     try system.initializeGlimmerMatrix(Settings.Glimmer.crystal_coherence);
 
-    // 🌌 Display initialization status
-    try stdout.print("🌌 Quantum core initialized with {d} entanglement pairs\n",
+    // 🌌 Display initialization status with enhanced formatting
+    try stdout.print("`<gl-azure shimmer=0.90>`🌌 Quantum core initialized with {d} entanglement pairs`</gl-azure>`\n",
                      .{Settings.Quantum.max_entanglement});
-    try stdout.print("✨ GLIMMER enhancement active at {d:.2}x resonance\n",
+    try stdout.print("`<gl-gold resonance=0.92>`✨ GLIMMER enhancement active at {d:.2}x resonance`</gl-gold>`\n",
                      .{Settings.Glimmer.enhancement_factor});
-    try stdout.print("💫 Quantum detection matrix coherence: {d:.3}\n",
+    try stdout.print("`<gl-crystal intensity=0.94>`💫 Quantum detection matrix coherence: {d:.3}`</gl-crystal>`\n",
                      .{Settings.Quantum.min_coherence});
 
-    // 🎇 Begin protection cycle
+    // 🎇 Begin protection cycle with enhanced GLIMMER resonance
     try system.startProtectionCycle();
 }
