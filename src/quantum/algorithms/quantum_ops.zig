@@ -302,5 +302,4 @@ pub const QuantumError = error{
     InvalidParameters,  // Add this
 };
 
-// Fix indentation of QuantumError definition
-// Should be inside the QuantumOps struct
+};

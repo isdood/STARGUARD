@@ -122,7 +122,7 @@ pub const MatchEngine = struct {
         const quantum_weight = try self.quantum_state.getWeight();
 
         for (signature, 0..) |byte, i| {
-            matched_bits += @popCount(u8, byte ^ pattern.signature[i]);
+            matched_bits += @popCount(byte ^ pattern.signature[i]);
         }
 
         const base_similarity = 1.0 - @as(f64, @floatFromInt(matched_bits)) / (32.0 * 8.0);

@@ -14,6 +14,7 @@ pub const OptimizationType = enum {
     pattern_init,
     pattern_process,
     pattern_analyze,
+    quantum_init,    // Add this
     quantum_ops,
     quantum_hadamard,
     quantum_cnot,

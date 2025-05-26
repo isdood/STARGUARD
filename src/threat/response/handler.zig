@@ -117,7 +117,11 @@ pub const ResponseHandler = struct {
 
     /// 🌟 Monitor threat activity
     fn monitorThreat(self: *Self, response: *Response) !void {
-        _ = self;
+        const quantum_measure = try self.quantum_state.measure();
+        if (quantum_measure > 0.7) {
+            response.status = .active;
+            std.log.info("💠 Monitoring threat - ID: {}", .{response.threat_id});
+        }
     }
 
     /// 💠 Isolate identified threat
