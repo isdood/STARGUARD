@@ -62,9 +62,9 @@ pub const Metrics = struct {
 
     /// 💫 Get pattern detection rate
     pub fn getDetectionRate(self: *Self) f64 {
-        const elapsed = @intToFloat(f64,
-                                    std.time.timestamp() - self.start_time
-        );
+        const elapsed = @as(f64, @floatFromInt(
+            std.time.timestamp() - self.last_detection
+        ));
         return @intToFloat(f64, self.total_detections) / elapsed;
     }
 
@@ -118,7 +118,7 @@ const PatternMetrics = struct {
 
     /// ✨ Get average coherence
     pub fn getAverageCoherence(self: *const PatternMetrics) f64 {
-        return self.coherence_sum / @intToFloat(f64, self.detections);
+        return self.coherence_sum / @as(f64, @floatFromInt(self.detections));
     }
 };
 

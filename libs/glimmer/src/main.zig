@@ -8,17 +8,11 @@ const std = @import("std");
 
 /// 🌌 GLIMMER Optimization Patterns
 pub const OptimizationPattern = enum {
-    quantum_init,
-    pattern_sync,
-    quantum_measure,
-    quantum_calibrate,
-    pattern_sync,      // 💫 Pattern synchronization
-    pattern_validate,  // 🌟 Validation enhancement
-    pattern_recovery,  // ✨ Recovery optimization
-    metrics_init,      // 🎇 Metrics initialization
-    metrics_record,    // 💠 Record enhancement
-    state_update,      // ⚡ State update pattern
-    coherence_update,  // 💫 Coherence optimization
+    quantum_init,      // 💫 Quantum initialization
+    pattern_align,     // 🌟 Pattern alignment
+    quantum_measure,   // ✨ Quantum measurement
+    quantum_calibrate, // 🎇 Quantum calibration
+    crystal_sync,      // 💠 Crystal synchronization
 };
 
 /// 🌟 GLIMMER Enhancement Interface
