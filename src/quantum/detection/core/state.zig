@@ -50,24 +50,28 @@ pub const State = struct {
         self.allocator.free(self.coherence_matrix);
     }
 
-    /// 💫 Measure quantum coherence
+    /// 💫 Measure quantum coherence with GLIMMER enhancement
     pub fn measureCoherence(self: *Self) !f64 {
         try glimmer.setOptimization(.quantum_measure);
 
         var total_coherence: f64 = 0.0;
         const pattern_count = self.active_patterns.count();
 
-        // 🌟 Calculate weighted coherence with GLIMMER enhancement
+        // 🌟 Calculate weighted coherence with quantum harmonics
         for (self.coherence_matrix) |coherence| {
             total_coherence += coherence * self.enhancement_factor;
         }
 
-        // ✨ Apply quantum harmonics with corrected type conversion
-        const max_entanglement = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
+        // ✨ Calculate enhancement ratios
+        const max_entanglement_f64 = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
         const pattern_count_f64 = @as(f64, @floatFromInt(pattern_count));
+        const ratio = pattern_count_f64 / max_entanglement_f64;
 
-        return total_coherence * (1.0 + (self.enhancement_factor - 1.0) *
-        pattern_count_f64 / max_entanglement);
+        // 💫 Apply GLIMMER resonance enhancement
+        const enhancement = 1.0 + (self.enhancement_factor - 1.0) * ratio;
+
+        // 🎇 Return enhanced coherence value
+        return total_coherence * enhancement;
     }
 
         // ✨ Apply GLIMMER enhancement
