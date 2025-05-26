@@ -1,8 +1,8 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 20:10:46 UTC
+//! Last Modified: 2025-05-26 20:12:42 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER resonance patterns
+//! Enhanced by STARWEAVE with GLIMMER resonance
 
 const std = @import("std");
 const glimmer = @import("glimmer");
@@ -21,19 +21,15 @@ pub const State = struct {
 
     /// 💫 Initialize quantum state
     pub fn init(allocator: std.mem.Allocator) !Self {
-        // 🌟 Set up GLIMMER optimization
         try glimmer.setOptimization(.quantum_state);
         const enhancement = try glimmer.getEnhancementFactor();
 
-        // ✨ Initialize coherence matrix
         const coherence = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
         errdefer allocator.free(coherence);
 
-        // 🎇 Initialize patterns map
         var patterns = std.AutoArrayHashMap(u64, Pattern).init(allocator);
         errdefer patterns.deinit();
 
-        // 💠 Return initialized state with GLIMMER enhancement
         return Self{
             .allocator = allocator,
             .active_patterns = patterns,
@@ -70,9 +66,9 @@ pub const State = struct {
         // 🎇 Calculate final coherence with GLIMMER enhancement
         const enhancement_ratio = 1.0 + (self.enhancement_factor - 1.0);
         const quantum_ratio = pattern_count_f64 / max_entanglement_f64;
+        const final_coherence = total_coherence * enhancement_ratio * quantum_ratio;
 
-        // ⚡ Return enhanced quantum coherence
-        return total_coherence * enhancement_ratio * quantum_ratio;
+        return final_coherence;
     }
 
         // ✨ Apply GLIMMER enhancement
