@@ -26,7 +26,7 @@ pub const State = struct {
         const enhancement = try glimmer.getEnhancementFactor();
 
         // ✨ Initialize coherence matrix
-        var coherence = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
+        const coherence = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
         errdefer allocator.free(coherence);
 
         // 🎇 Initialize patterns map
