@@ -1,8 +1,8 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 20:02:08 UTC
+//! Last Modified: 2025-05-26 20:05:42 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER resonance
+//! Enhanced by STARWEAVE with GLIMMER resonance patterns
 
 const std = @import("std");
 const glimmer = @import("glimmer");
@@ -50,7 +50,7 @@ pub const State = struct {
         self.allocator.free(self.coherence_matrix);
     }
 
-    /// 💫 Measure quantum coherence
+    /// 💫 Measure quantum coherence with GLIMMER enhancement
     pub fn measureCoherence(self: *Self) !f64 {
         try glimmer.setOptimization(.quantum_measure);
 
@@ -58,20 +58,22 @@ pub const State = struct {
         var total_coherence: f64 = 0.0;
         const pattern_count = self.active_patterns.count();
 
-        // ✨ Calculate base coherence
+        // ✨ Calculate base coherence with quantum harmonics
         for (self.coherence_matrix) |coherence| {
             total_coherence += coherence * self.enhancement_factor;
         }
 
-        // 💠 Apply quantum enhancement
-        const pattern_ratio = @as(f64, @floatFromInt(pattern_count));
-        const max_entanglement = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
+        // 💠 Convert quantum metrics
+        const pattern_count_f64 = @as(f64, @floatFromInt(pattern_count));
+        const max_entanglement_f64 = @as(f64, @floatFromInt(root.Settings.Quantum.max_entanglement));
 
-        // 🎇 Calculate final coherence
-        const enhancement_factor = 1.0 + (self.enhancement_factor - 1.0);
-        const quantum_ratio = pattern_ratio / max_entanglement;
+        // 🎇 Calculate final coherence with GLIMMER enhancement
+        const enhancement_ratio = 1.0 + (self.enhancement_factor - 1.0);
+        const quantum_ratio = pattern_count_f64 / max_entanglement_f64;
+        const final_coherence = total_coherence * enhancement_ratio * quantum_ratio;
 
-        return total_coherence * enhancement_factor * quantum_ratio;
+        // ⚡ Return enhanced quantum coherence
+        return final_coherence;
     }
 
         // ✨ Apply GLIMMER enhancement
