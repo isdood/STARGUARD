@@ -1,10 +1,19 @@
 //! ✨ GLIMMER Core Module
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:21:13 UTC
+//! Last Modified: 2025-05-26 13:25:22 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
 const std = @import("std");
+
+/// 💫 GLIMMER Optimization Levels
+pub const OptLevel = enum {
+    baseline,    // 💠 Basic optimization
+    enhanced,    // 🌟 Enhanced pattern recognition
+    quantum,     // ⚡ Full quantum integration
+    adaptive,    // ✨ Dynamic optimization
+    maximum,     // 🎇 Maximum GLIMMER enhancement
+};
 
 /// 🌌 GLIMMER Optimization Patterns
 pub const OptimizationType = enum {
@@ -23,12 +32,14 @@ pub const OptimizationType = enum {
     quantum_teleport,
     quantum_swap,
     quantum_execute,
-    quantum_recalibrate,  // Added this pattern
+    quantum_recalibrate,
     state_preserve,
     state_restore,
     response_init,
     response_handle,
     response_execute,
+    config_update,
+    quantum_check,
 };
 
 /// 💫 GLIMMER Enhancement Interface
@@ -36,6 +47,7 @@ pub const Glimmer = struct {
     enhancement_factor: f64,
     pattern_stability: f64,
     quantum_resonance: f64,
+    opt_level: OptLevel,
 
     const Self = @This();
 
@@ -45,6 +57,7 @@ pub const Glimmer = struct {
             .enhancement_factor = 1.0,
             .pattern_stability = 1.0,
             .quantum_resonance = 1.0,
+            .opt_level = .adaptive,
         };
     }
 
@@ -59,6 +72,11 @@ pub const Glimmer = struct {
     pub fn getEnhancementFactor(self: *Self) !f64 {
         return self.enhancement_factor;
     }
+
+    /// ⚡ Set optimization level
+    pub fn setOptLevel(self: *Self, level: OptLevel) void {
+        self.opt_level = level;
+    }
 };
 
 /// 🎇 Global GLIMMER instance
@@ -71,4 +89,8 @@ pub fn setOptimization(pattern: OptimizationType) !void {
 
 pub fn getEnhancementFactor() !f64 {
     return global_glimmer.getEnhancementFactor();
+}
+
+pub fn setOptLevel(level: OptLevel) void {
+    global_glimmer.setOptLevel(level);
 }
