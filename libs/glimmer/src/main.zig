@@ -1,17 +1,14 @@
 //! ✨ GLIMMER Enhancement Framework
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 15:09:19 UTC
+//! Last Modified: 2025-05-26 19:26:17 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE
+//! Enhanced by STARWEAVE with quantum resonance
 
-const std = @import("std");
-
-/// 🌌 GLIMMER Optimization Patterns
 pub const OptimizationPattern = enum {
     quantum_init,      // 💫 Quantum initialization
-    pattern_align,     // 🌟 Pattern alignment
-    quantum_measure,   // ✨ Quantum measurement
-    quantum_calibrate, // 🎇 Quantum calibration
+    quantum_measure,   // 🌟 Quantum measurement
+    quantum_calibrate, // ✨ Quantum calibration
+    pattern_align,     // 🎇 Pattern alignment
     crystal_sync,      // 💠 Crystal synchronization
 };
 

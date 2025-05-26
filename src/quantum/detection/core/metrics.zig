@@ -65,7 +65,7 @@ pub const Metrics = struct {
         const elapsed = @as(f64, @floatFromInt(
             std.time.timestamp() - self.last_detection
         ));
-        return @intToFloat(f64, self.total_detections) / elapsed;
+        return @as(f64, @floatFromInt(self.total_detections)) / elapsed;
     }
 
     /// 🌌 Calculate quantum coherence
@@ -74,7 +74,7 @@ pub const Metrics = struct {
         for (pattern) |value| {
             coherence += value * self.enhancement_factor;
         }
-        return coherence / @intToFloat(f64, pattern.len);
+        return coherence / @as(f64, @floatFromInt(pattern.len));
     }
 
     /// 🎇 Get or create pattern metrics
