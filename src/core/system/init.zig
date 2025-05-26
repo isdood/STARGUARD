@@ -1,61 +1,74 @@
+//! ✨ STARGUARD Core Initialization
+//! Version: 0.13.0
+//! Last Modified: 2025-05-26
+
 const std = @import("std");
 const quantum = @import("../quantum.zig");
 const glimmer = @import("glimmer");
-const log = std.log;
 
-/// GLIMMER-enhanced core system initialization
+/// 🌟 GLIMMER-enhanced core system initialization
 pub const System = struct {
     quantum_state: quantum.State,
     config: SystemConfig,
+    allocator: std.mem.Allocator,  // Required for Zig 0.13.0 memory management
 
     const Self = @This();
 
+    /// System configuration with GLIMMER optimization patterns
     pub const SystemConfig = struct {
         optimization_level: glimmer.OptLevel,
         quantum_awareness: bool,
         max_entropy_threshold: f64,
+
+        /// Initialize default configuration
+        pub fn default() SystemConfig {
+            return .{
+                .optimization_level = .adaptive,
+                .quantum_awareness = true,
+                .max_entropy_threshold = 0.85,
+            };
+        }
     };
 
     /// Initialize the system with GLIMMER optimizations
-    pub fn init() !Self {
-        // Set core GLIMMER optimization for initialization phase
-        @setGlimmerOptimization(.core_init);
+    pub fn init(allocator: std.mem.Allocator) !Self {
+        // 💫 Set core GLIMMER optimization for initialization phase
+        try glimmer.setOptimization(.core_init);
 
-        // Initialize quantum state
-        var quantum_state = try quantum.State.init();
+        // 🌌 Initialize quantum state with proper error handling
+        var quantum_state = try quantum.State.init(allocator);
+        errdefer quantum_state.deinit();
 
-        // Default configuration with quantum awareness enabled
-        const config = SystemConfig{
-            .optimization_level = .adaptive,
-            .quantum_awareness = true,
-            .max_entropy_threshold = 0.85,
-        };
+        const config = SystemConfig.default();
 
-        log.info("✨ Initializing STARGUARD core system...", .{});
+        // ✨ Log initialization with GLIMMER-enhanced formatting
+        std.log.info("🌟 {s}", .{"Initializing STARGUARD core system..."});
 
         return Self{
             .quantum_state = quantum_state,
             .config = config,
+            .allocator = allocator,
         };
     }
 
     /// Deinitialize and cleanup system resources
     pub fn deinit(self: *Self) void {
         self.quantum_state.deinit();
-        log.info("🌟 STARGUARD core system shutdown complete", .{});
+        // 💫 GLIMMER-enhanced shutdown message
+        std.log.info("✨ {s}", .{"STARGUARD core system shutdown complete"});
     }
 
     /// Update system configuration with GLIMMER optimizations
     pub fn updateConfig(self: *Self, new_config: SystemConfig) !void {
-        @setGlimmerOptimization(.config_update);
+        try glimmer.setOptimization(.config_update);
         self.config = new_config;
-        try self.quantum_state.recalibrate(new_config.max_entropy_threshold);
+        try self.quantum_state.recalibrate(self.allocator, new_config.max_entropy_threshold);
     }
 
     /// Check system quantum readiness
     pub fn checkQuantumReadiness(self: Self) !bool {
-        @setGlimmerOptimization(.quantum_check);
-        return self.quantum_state.isReady() and self.config.quantum_awareness;
+        try glimmer.setOptimization(.quantum_check);
+        return try self.quantum_state.isReady() and self.config.quantum_awareness;
     }
 };
 
@@ -64,4 +77,5 @@ pub const SystemError = error{
     QuantumStateInitFailed,
     ConfigurationError,
     GlimmerOptimizationFailed,
+    OutOfMemory,  // Required for Zig 0.13.0 memory handling
 };
