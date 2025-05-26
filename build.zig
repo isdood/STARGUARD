@@ -6,22 +6,22 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "starguard",
-        .root_source_file = .{ .cwd_relative = "src/main.zig" }, // 💫 Updated to use cwd_relative
+        .root_source_file = .{ .cwd_relative = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
 
     // 🌟 Add GLIMMER dependency
-    const glimmer_module = b.addModule("glimmer", .{
-        .source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" }, // 💫 Updated path syntax
-        .dependencies = &.{},
+    const glimmer_module = b.createModule(.{
+        .root_source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" },
+        .imports = &.{},
     });
     exe.addModule("glimmer", glimmer_module);
 
     // ✨ Add quantum detection modules
-    const quantum_detection = b.addModule("quantum_detection", .{
-        .source_file = .{ .cwd_relative = "src/quantum/detection/core/detector.zig" }, // 💫 Updated path syntax
-        .dependencies = &.{
+    const quantum_detection = b.createModule(.{
+        .root_source_file = .{ .cwd_relative = "src/quantum/detection/core/detector.zig" },
+        .imports = &.{
             .{ .name = "glimmer", .module = glimmer_module },
         },
     });
@@ -31,7 +31,7 @@ pub fn build(b: *std.Build) void {
 
     // 🎇 Add test step
     const main_tests = b.addTest(.{
-        .root_source_file = .{ .cwd_relative = "src/main.zig" }, // 💫 Updated path syntax
+        .root_source_file = .{ .cwd_relative = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
