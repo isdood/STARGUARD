@@ -13,9 +13,11 @@ pub fn build(b: *std.Build) void {
 
     // Add GLIMMER dependency with updated syntax
     const glimmer_module = b.addModule("glimmer", .{
-        .root_source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" },  // Changed from source_file to root_source_file
+        .root_source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" },
     });
-    exe.addModule("glimmer", glimmer_module);
+
+    // Updated module addition syntax
+    exe.root_module.addImport("glimmer", glimmer_module);
 
     // Add test step
     const unit_tests = b.addTest(.{
