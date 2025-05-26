@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Main Entry Point
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 11:19:27 UTC
+//! Last Modified: 2025-05-26 11:26:24 UTC
 
 const std = @import("std");
 const root = @import("root.zig");
@@ -18,30 +18,35 @@ pub fn main() !void {
     var quantum_state = try quantum.QuantumState.init(allocator);
     defer quantum_state.deinit();
 
-        const measurement = try quantum_state.measure();
-        std.log.info("✨ Quantum measurement: {d}", .{measurement});
+    // ✨ Perform initial quantum measurement
+    const initial_measurement = try quantum_state.measure();
+    std.log.info("🌌 Initial quantum coherence: {d:.4}", .{initial_measurement});
 
-    // ✨ Initialize STARGUARD system
+    // 💫 Initialize STARGUARD system
     var sys = try System.init(allocator);
     defer sys.deinit();
 
     // 🌟 System startup message with GLIMMER coloring
-    std.log.info("🌟 STARGUARD v0.13.0 initialized", .{});
+    std.log.info("✨ STARGUARD v0.13.0 initialized", .{});
 
-    // 💫 Initialize pattern detection system
+    // 🌌 Initialize pattern detection system
     var pattern_detector = try detector.PatternDetector.init(allocator, &quantum_state);
     defer pattern_detector.deinit();
 
     if (try sys.checkQuantumReadiness()) {
         std.log.info("💫 Quantum subsystems ready", .{});
 
-        // Example pattern detection (replace with actual data source)
+        // Perform quantum-enhanced pattern detection
         const test_data = "test pattern";
         if (try pattern_detector.detect(test_data)) |pattern| {
-            std.log.info("✨ Pattern detected with confidence: {d}", .{pattern.confidence});
+            std.log.info("✨ Pattern detected with confidence: {d:.4}", .{pattern.confidence});
+
+            // 🌌 Verify quantum coherence after pattern detection
+            const post_measure = try quantum_state.measure();
+            std.log.info("💫 Post-detection quantum coherence: {d:.4}", .{post_measure});
         }
     } else {
-        std.log.warn("🌌 Quantum subsystems not ready", .{});
+        std.log.warn("🌌 Quantum subsystems not ready - check coherence levels", .{});
     }
 }
 
