@@ -1,6 +1,6 @@
 //! ✨ GLIMMER Core Module
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:17:20 UTC
+//! Last Modified: 2025-05-26 13:21:13 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
@@ -23,6 +23,7 @@ pub const OptimizationType = enum {
     quantum_teleport,
     quantum_swap,
     quantum_execute,
+    quantum_recalibrate,  // Added this pattern
     state_preserve,
     state_restore,
     response_init,
