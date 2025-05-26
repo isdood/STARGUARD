@@ -1,6 +1,6 @@
 //! ✨ STARGUARD System Initialization
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 22:16:06 UTC
+//! Last Modified: 2025-05-26 22:17:30 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -26,8 +26,8 @@ pub const System = struct {
 
     /// `<gl-gold resonance=0.95>`🌟 Initialize system with quantum calibration`</gl-gold>`
     pub fn init(allocator: std.mem.Allocator) !Self {
-        // 💠 Initialize quantum matrix
-        var quantum_matrix = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
+        // 💠 Initialize quantum matrix with immutability
+        const quantum_matrix = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
         errdefer allocator.free(quantum_matrix);
 
         // ✨ Set initial quantum states
