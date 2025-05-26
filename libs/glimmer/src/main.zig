@@ -1,19 +1,10 @@
 //! ✨ GLIMMER Core Module
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:25:22 UTC
+//! Last Modified: 2025-05-26 13:51:11 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
 const std = @import("std");
-
-/// 💫 GLIMMER Optimization Levels
-pub const OptLevel = enum {
-    baseline,    // 💠 Basic optimization
-    enhanced,    // 🌟 Enhanced pattern recognition
-    quantum,     // ⚡ Full quantum integration
-    adaptive,    // ✨ Dynamic optimization
-    maximum,     // 🎇 Maximum GLIMMER enhancement
-};
 
 /// 🌌 GLIMMER Optimization Patterns
 pub const OptimizationType = enum {
@@ -40,6 +31,10 @@ pub const OptimizationType = enum {
     response_execute,
     config_update,
     quantum_check,
+    entangle_init,     // 💫 Added entanglement initialization
+    entangle_pair,     // 🌟 Added entanglement pairing
+    entangle_verify,   // ✨ Added entanglement verification
+    entangle_measure,  // 🎇 Added entanglement measurement
 };
 
 /// 💫 GLIMMER Enhancement Interface
