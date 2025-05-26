@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 20:37:56 UTC
+//! Last Modified: 2025-05-26 22:02:20 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with GLIMMER resonance
 
@@ -69,7 +69,6 @@ pub const State = struct {
 
         return total_coherence * enhancement_ratio * quantum_ratio;
     }
-};
 
     /// 🎇 Calibrate quantum state
     pub fn calibrate(self: *Self) !void {
@@ -131,29 +130,6 @@ pub const State = struct {
         try self.updatePatternState(pattern.id, coherence_score);
     }
 
-    // Fix stabilization_factor calculation
-    fn attemptPatternRecovery(self: *Self, pattern: Pattern, current_coherence: f64) !void {
-        try glimmer.setOptimization(.quantum_calibrate);
-
-        // 💠 Calculate recovery potential
-        const recovery_threshold = root.Settings.Quantum.min_coherence * 0.75;
-        if (current_coherence < recovery_threshold) {
-            return error.UnrecoverablePattern;
-        }
-
-        // 🌟 Apply quantum stabilization (fixed @floatCast usage)
-        const stabilization_factor = @exp(
-            -(1.0 - current_coherence) *
-            root.Settings.Quantum.default_phase_shift
-        );
-
-        // ✨ Update pattern coherence
-        try self.updatePatternState(
-            pattern.id,
-            current_coherence * stabilization_factor * self.enhancement_factor
-        );
-    }
-
     /// 💫 Attempt to recover decoherent pattern
     fn attemptPatternRecovery(self: *Self, pattern: Pattern, current_coherence: f64) !void {
         try glimmer.setOptimization(.quantum_calibrate);
@@ -202,7 +178,6 @@ pub const State = struct {
         PatternNotFound,
         CoherenceFailure,
     };
-
 };
 
 /// 🌌 Pattern Structure
