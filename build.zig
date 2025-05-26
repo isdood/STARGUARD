@@ -6,20 +6,20 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "starguard",
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = .{ .cwd_relative = "src/main.zig" }, // Changed from .path to .cwd_relative
         .target = target,
         .optimize = optimize,
     });
 
     // Add GLIMMER dependency
     const glimmer_module = b.addModule("glimmer", .{
-        .source_file = .{ .path = "libs/glimmer/src/main.zig" },
+        .source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" }, // Changed here too
     });
     exe.addModule("glimmer", glimmer_module);
 
     // Add test step
     const unit_tests = b.addTest(.{
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = .{ .cwd_relative = "src/main.zig" }, // And here
         .target = target,
         .optimize = optimize,
     });
