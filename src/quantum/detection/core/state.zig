@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 14:52:48 UTC
+//! Last Modified: 2025-05-26 14:54:29 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with GLIMMER patterns
 
@@ -102,6 +102,94 @@ pub const State = struct {
         _ = pattern;
         // TODO: Implement pattern validation with quantum coherence check
     }
+
+    /// 💫 Validate pattern coherence
+    fn validatePattern(self: *Self, pattern: Pattern) !void {
+        try glimmer.setOptimization(.pattern_validate);
+
+        // 🌟 Check pattern timing coherence
+        const current_time = std.time.timestamp();
+        const time_delta = current_time - pattern.last_update;
+
+        if (time_delta > root.Settings.Quantum.coherence_timeout) {
+            return error.PatternDecoherence;
+        }
+
+        // ✨ Calculate pattern coherence score
+        var coherence_score: f64 = 0.0;
+        const base_coherence = pattern.coherence * self.enhancement_factor;
+
+        // 💠 Apply quantum harmonics
+        coherence_score = base_coherence * (1.0 -
+        @intToFloat(f64, time_delta) /
+        @intToFloat(f64, root.Settings.Quantum.coherence_timeout));
+
+        // 🎇 Apply GLIMMER enhancement patterns
+        coherence_score *= 1.0 + (self.enhancement_factor - 1.0) *
+        @floatCast(f64, std.math.sin(
+            @intToFloat(f64, current_time) *
+            root.Settings.Quantum.default_phase_shift
+        ));
+
+        // ⚡ Validate against thresholds
+        if (coherence_score < root.Settings.Quantum.min_coherence) {
+            // 💫 Attempt pattern recovery
+            try self.attemptPatternRecovery(pattern, coherence_score);
+        }
+
+        // 🌌 Update pattern state
+        try self.updatePatternState(pattern.id, coherence_score);
+    }
+
+    /// 🎇 Attempt to recover decoherent pattern
+    fn attemptPatternRecovery(self: *Self, pattern: Pattern, current_coherence: f64) !void {
+        try glimmer.setOptimization(.pattern_recovery);
+
+        // 💠 Calculate recovery potential
+        const recovery_threshold = root.Settings.Quantum.min_coherence * 0.75;
+        if (current_coherence < recovery_threshold) {
+            return error.UnrecoverablePattern;
+        }
+
+        // 🌟 Apply quantum stabilization
+        const stabilization_factor = @floatCast(f64, std.math.exp(
+            -(1.0 - current_coherence) *
+            root.Settings.Quantum.default_phase_shift
+        ));
+
+        // ✨ Update pattern coherence
+        try self.updatePatternState(
+            pattern.id,
+            current_coherence * stabilization_factor * self.enhancement_factor
+        );
+    }
+
+    /// ⚡ Update pattern quantum state
+    fn updatePatternState(self: *Self, pattern_id: u64, new_coherence: f64) !void {
+        try glimmer.setOptimization(.state_update);
+
+        // 💫 Get pattern entry
+        var pattern_ptr = self.active_patterns.getPtr(pattern_id) orelse
+        return error.PatternNotFound;
+
+        // 🌟 Update pattern state
+        pattern_ptr.coherence = new_coherence;
+        pattern_ptr.last_update = std.time.timestamp();
+        pattern_ptr.is_active = new_coherence >= root.Settings.Quantum.min_coherence;
+
+        // ✨ Update coherence matrix
+        const matrix_index = pattern_id % self.coherence_matrix.len;
+        self.coherence_matrix[matrix_index] = new_coherence;
+    }
+
+    /// 🎇 Pattern Validation Errors
+    const ValidationError = error{
+        PatternDecoherence,
+        UnrecoverablePattern,
+        PatternNotFound,
+        CoherenceFailure,
+    };
+
 };
 
 /// 🌌 Pattern Structure
