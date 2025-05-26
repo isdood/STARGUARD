@@ -298,4 +298,9 @@ pub const QuantumError = error{
     DecoherenceError,
     TeleportationFailed,
     GateApplicationFailed,
+    InvalidQubitCount,  // Add this
+    InvalidParameters,  // Add this
 };
+
+// Fix indentation of QuantumError definition
+// Should be inside the QuantumOps struct
