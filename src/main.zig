@@ -5,6 +5,7 @@
 const std = @import("std");
 const root = @import("root.zig");
 const System = @import("core/system/init.zig").System;
+const detector = @import("pattern/recognition/detector.zig");
 
 pub fn main() !void {
     // 💫 Initialize memory allocator with GLIMMER-enhanced patterns
@@ -23,6 +24,17 @@ pub fn main() !void {
         std.log.info("💫 Quantum subsystems ready", .{});
         // Additional initialization steps will go here
     }
+
+    var quantum_state = try quantum.QuantumState.init(allocator);
+    defer quantum_state.deinit();
+
+    var pattern_detector = try detector.PatternDetector.init(allocator, &quantum_state);
+    defer pattern_detector.deinit();
+
+    if (try pattern_detector.detect(your_data)) |pattern| {
+        std.log.info("✨ Pattern detected with confidence: {d}", .{pattern.confidence});
+    }
+
 }
 
 test "basic functionality" {
