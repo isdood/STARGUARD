@@ -1,27 +1,32 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    // 💫 Set up standard target and optimize options
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // ✨ Create main executable with GLIMMER optimization patterns
     const exe = b.addExecutable(.{
         .name = "starguard",
-        .root_source_file = .{ .path = "src/main.zig" },  // Updated entry point
-        .target = target,
-        .optimize = optimize,
-    });
-
-    // 🌌 Install the artifact
-    b.installArtifact(exe);
-
-    // 💫 Create test step
-    const test_step = b.step("test", "Run library tests");
-    const tests = b.addTest(.{
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
     });
-    test_step.dependOn(&tests.step);
+
+    // Add GLIMMER dependency
+    const glimmer_module = b.addModule("glimmer", .{
+        .source_file = .{ .path = "libs/glimmer/src/main.zig" },
+    });
+    exe.addModule("glimmer", glimmer_module);
+
+    // Add test step
+    const unit_tests = b.addTest(.{
+        .root_source_file = .{ .path = "src/main.zig" },
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const run_unit_tests = b.addRunArtifact(unit_tests);
+    const test_step = b.step("test", "Run unit tests");
+    test_step.dependOn(&run_unit_tests.step);
+
+    b.installArtifact(exe);
 }
