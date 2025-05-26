@@ -1,6 +1,6 @@
 //! ✨ GLIMMER Core Module
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 13:02:48 UTC
+//! Last Modified: 2025-05-26 13:17:20 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
@@ -14,7 +14,7 @@ pub const OptimizationType = enum {
     pattern_init,
     pattern_process,
     pattern_analyze,
-    quantum_init,    // Add this
+    quantum_init,
     quantum_ops,
     quantum_hadamard,
     quantum_cnot,
@@ -25,6 +25,9 @@ pub const OptimizationType = enum {
     quantum_execute,
     state_preserve,
     state_restore,
+    response_init,
+    response_handle,
+    response_execute,
 };
 
 /// 💫 GLIMMER Enhancement Interface
@@ -45,18 +48,20 @@ pub const Glimmer = struct {
     }
 
     /// 🌟 Set optimization pattern
-    pub fn setOptimization(pattern: OptimizationType) !void {
-        _ = pattern; // TODO: Implement pattern-specific optimizations
+    pub fn setOptimization(self: *Self, pattern: OptimizationType) !void {
+        _ = self;
+        _ = pattern;
+        // TODO: Implement pattern-specific optimizations
     }
 
     /// 💠 Get current enhancement factor
-    pub fn getEnhancementFactor() !f64 {
-        return 1.0; // TODO: Implement dynamic enhancement calculations
+    pub fn getEnhancementFactor(self: *Self) !f64 {
+        return self.enhancement_factor;
     }
 };
 
 /// 🎇 Global GLIMMER instance
-var global_glimmer = Glimmer.init();
+var global_glimmer: Glimmer = Glimmer.init();
 
 /// ✨ Public interface
 pub fn setOptimization(pattern: OptimizationType) !void {

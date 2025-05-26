@@ -126,7 +126,6 @@ pub const ResponseHandler = struct {
 
     /// 💠 Isolate identified threat
     fn isolateThreat(self: *Self, response: *Response) !void {
-        _ = self;
         const quantum_stable = try self.quantum_state.measure() > 0.8;
 
         if (quantum_stable) {
