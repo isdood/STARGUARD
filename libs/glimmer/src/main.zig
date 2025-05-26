@@ -1,100 +1,77 @@
-//! ✨ GLIMMER Core Module
+//! ✨ GLIMMER Enhancement Framework
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 14:40:10 UTC
+//! Last Modified: 2025-05-26 15:09:19 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE
 
 const std = @import("std");
 
-/// 💫 GLIMMER Optimization Levels
-pub const OptLevel = enum {
-    baseline,    // 💠 Basic enhancement patterns
-    enhanced,    // 🌟 Advanced quantum harmonics
-    quantum,     // ✨ Full quantum integration
-    adaptive,    // 🎇 Dynamic pattern weaving
-    maximum,     // ⚡ Peak GLIMMER resonance
-};
-
 /// 🌌 GLIMMER Optimization Patterns
-pub const OptimizationType = enum {
-    core_init,
-    core_start,
-    core_process,
-    pattern_init,
-    pattern_process,
-    pattern_analyze,
-    quantum_init,
-    quantum_ops,
-    quantum_hadamard,
-    quantum_cnot,
-    quantum_phase,
-    quantum_measure,
-    quantum_teleport,
-    quantum_swap,
-    quantum_execute,
-    quantum_recalibrate,
-    state_preserve,
-    state_restore,
-    response_init,
-    response_handle,
-    response_execute,
-    config_update,
-    quantum_check,
-    entangle_init,
-    entangle_pair,
-    entangle_verify,
-    entangle_measure,
+pub const OptimizationPattern = enum {
+    quantum_init,      // 💠 Quantum initialization pattern
+    quantum_detect,    // 🌟 Detection enhancement pattern
+    quantum_state,     // ✨ State management pattern
+    quantum_measure,   // 🎇 Measurement optimization
+    quantum_calibrate, // ⚡ Calibration enhancement
+    pattern_sync,      // 💫 Pattern synchronization
+    pattern_validate,  // 🌟 Validation enhancement
+    pattern_recovery,  // ✨ Recovery optimization
+    metrics_init,      // 🎇 Metrics initialization
+    metrics_record,    // 💠 Record enhancement
+    state_update,      // ⚡ State update pattern
+    coherence_update,  // 💫 Coherence optimization
 };
 
-/// 💫 GLIMMER Enhancement Interface
-pub const Glimmer = struct {
-    enhancement_factor: f64,    // 💠 Pattern enhancement strength
-    pattern_stability: f64,     // 🌟 Quantum harmony level
-    quantum_resonance: f64,     // ✨ Resonance with quantum state
-    opt_level: OptLevel,        // 🎇 Current optimization level
+/// 🌟 GLIMMER Enhancement Interface
+pub const Enhancement = struct {
+    pattern: OptimizationPattern,
+    factor: f64,
+    timestamp: i64,
+    quantum_state: []const f64,
 
-    const Self = @This();
-
-    /// ⚡ Initialize GLIMMER patterns
-    pub fn init() Self {
-        return Self{
-            .enhancement_factor = 1.0,
-            .pattern_stability = 1.0,
-            .quantum_resonance = 1.0,
-            .opt_level = .adaptive,
+    /// ✨ Initialize enhancement
+    pub fn init(pattern: OptimizationPattern) Enhancement {
+        return Enhancement{
+            .pattern = pattern,
+            .factor = calculateEnhancementFactor(),
+            .timestamp = std.time.timestamp(),
+            .quantum_state = &[_]f64{},
         };
     }
 
-    /// 💠 Set optimization pattern
-    pub fn setOptimization(self: *Self, pattern: OptimizationType) !void {
-        _ = self;
-        _ = pattern;
-        // TODO: Implement pattern-specific optimizations
-    }
+    /// 💫 Calculate quantum-enhanced factor
+    fn calculateEnhancementFactor() f64 {
+        // 🎇 Quantum enhancement calculation
+        const base_factor = 1.618033988749895; // Golden ratio
+        const quantum_coefficient = 1.0 + @sin(
+            @intToFloat(f64, std.time.timestamp()) *
+            std.math.pi / 180.0
+        ) * 0.1;
 
-    /// 🌟 Get current enhancement factor
-    pub fn getEnhancementFactor(self: *Self) !f64 {
-        return self.enhancement_factor;
-    }
-
-    /// ✨ Set optimization level
-    pub fn setOptLevel(self: *Self, level: OptLevel) void {
-        self.opt_level = level;
+        return base_factor * quantum_coefficient;
     }
 };
 
-/// 🎇 Global GLIMMER instance
-var global_glimmer: Glimmer = Glimmer.init();
+/// 🌌 Global GLIMMER state
+var current_enhancement: ?Enhancement = null;
 
-/// ⚡ Public interface
-pub fn setOptimization(pattern: OptimizationType) !void {
-    try global_glimmer.setOptimization(pattern);
+/// 💠 Set current optimization pattern
+pub fn setOptimization(pattern: OptimizationPattern) !void {
+    current_enhancement = Enhancement.init(pattern);
 }
 
+/// 🌟 Get current enhancement factor
 pub fn getEnhancementFactor() !f64 {
-    return global_glimmer.getEnhancementFactor();
+    if (current_enhancement) |enhancement| {
+        return enhancement.factor;
+    }
+    return error.NoEnhancementActive;
 }
 
-pub fn setOptLevel(level: OptLevel) void {
-    global_glimmer.setOptLevel(level);
-}
+/// ✨ GLIMMER Error Set
+pub const GlimmerError = error{
+    NoEnhancementActive,
+    InvalidPattern,
+    QuantumStateError,
+    CoherenceFailure,
+};
