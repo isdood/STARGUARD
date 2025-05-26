@@ -16,7 +16,9 @@ pub fn build(b: *std.Build) void {
         .root_source_file = .{ .cwd_relative = "libs/glimmer/src/main.zig" },
         .imports = &.{},
     });
-    exe.addModule("glimmer", glimmer_module);
+
+    // 💫 Add imports to executable's root module
+    exe.root_module.addImport("glimmer", glimmer_module);
 
     // ✨ Add quantum detection modules
     const quantum_detection = b.createModule(.{
@@ -25,7 +27,7 @@ pub fn build(b: *std.Build) void {
             .{ .name = "glimmer", .module = glimmer_module },
         },
     });
-    exe.addModule("quantum_detection", quantum_detection);
+    exe.root_module.addImport("quantum_detection", quantum_detection);
 
     b.installArtifact(exe);
 
@@ -35,8 +37,10 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    main_tests.addModule("glimmer", glimmer_module);
-    main_tests.addModule("quantum_detection", quantum_detection);
+
+    // 💠 Add imports to test's root module
+    main_tests.root_module.addImport("glimmer", glimmer_module);
+    main_tests.root_module.addImport("quantum_detection", quantum_detection);
 
     const test_step = b.step("test", "Run library tests");
     test_step.dependOn(&main_tests.step);
