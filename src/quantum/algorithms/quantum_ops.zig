@@ -151,48 +151,144 @@ pub const QuantumOps = struct {
         }
     }
 
-    /// 💠 Apply Hadamard gate
+    /// 💠 Apply Hadamard gate for superposition
     fn applyHadamard(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_hadamard);
+
+        if (op.qubits.len != 1) return error.InvalidQubitCount;
+
+        const hadamard_matrix = [4][4]f64{
+            [4]f64{ 1.0 / @sqrt(2.0), 1.0 / @sqrt(2.0), 0.0, 0.0 },
+            [4]f64{ 1.0 / @sqrt(2.0), -1.0 / @sqrt(2.0), 0.0, 0.0 },
+            [4]f64{ 0.0, 0.0, 1.0, 0.0 },
+            [4]f64{ 0.0, 0.0, 0.0, 1.0 },
+        };
+
+        try self.quantum_state.applyGate(op.qubits[0], hadamard_matrix);
+        try self.verifyCoherence("Hadamard");
     }
 
-    /// 🌌 Apply CNOT gate
+    /// 🌟 Apply CNOT gate for entanglement
     fn applyCNOT(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_cnot);
+
+        if (op.qubits.len != 2) return error.InvalidQubitCount;
+
+        const cnot_matrix = [4][4]f64{
+            [4]f64{ 1.0, 0.0, 0.0, 0.0 },
+            [4]f64{ 0.0, 1.0, 0.0, 0.0 },
+            [4]f64{ 0.0, 0.0, 0.0, 1.0 },
+            [4]f64{ 0.0, 0.0, 1.0, 0.0 },
+        };
+
+        try self.entangle_manager.entangle(op.qubits[0], op.qubits[1]);
+        try self.quantum_state.applyGate(op.qubits[0], cnot_matrix);
+        try self.verifyCoherence("CNOT");
     }
 
-    /// ⚡ Apply phase gate
+    /// ⚡ Apply phase gate for quantum phase shift
     fn applyPhase(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_phase);
+
+        if (op.qubits.len != 1 or op.parameters.len != 1) {
+            return error.InvalidParameters;
+        }
+
+        const phase = op.parameters[0];
+        const phase_matrix = [4][4]f64{
+            [4]f64{ 1.0, 0.0, 0.0, 0.0 },
+            [4]f64{ 0.0, @cos(phase), -@sin(phase), 0.0 },
+            [4]f64{ 0.0, @sin(phase), @cos(phase), 0.0 },
+            [4]f64{ 0.0, 0.0, 0.0, 1.0 },
+        };
+
+        try self.quantum_state.applyGate(op.qubits[0], phase_matrix);
+        try self.verifyCoherence("Phase");
     }
 
-    /// 💫 Perform quantum measurement
+    /// 💫 Perform quantum measurement with GLIMMER enhancement
     fn performMeasurement(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_measure);
+
+        if (op.qubits.len == 0) return error.InvalidQubitCount;
+
+        var results = try self.allocator.alloc(f64, op.qubits.len);
+        defer self.allocator.free(results);
+
+        for (op.qubits, 0..) |qubit, i| {
+            results[i] = try self.quantum_state.measureQubit(qubit);
+        }
+
+        // Apply GLIMMER enhancement to measurement results
+        const glimmer_factor = try glimmer.getEnhancementFactor();
+        for (results) |*result| {
+            result.* *= glimmer_factor;
+        }
+
+        try self.verifyCoherence("Measurement");
     }
 
     /// 🎇 Perform quantum teleportation
     fn performTeleport(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_teleport);
+
+        if (op.qubits.len != 2) return error.InvalidQubitCount;
+
+        // Create EPR pair for teleportation
+        try self.entangle_manager.entangle(op.qubits[0], op.qubits[1]);
+
+        // Perform Bell measurement
+        try self.applyCNOT(&QuantumOperation{
+            .id = 0,
+            .op_type = .cnot,
+            .qubits = op.qubits[0..2],
+            .parameters = &[_]f64{},
+            .gate_sequence = null,
+            .timestamp = std.time.timestamp(),
+        });
+
+        try self.applyHadamard(&QuantumOperation{
+            .id = 0,
+            .op_type = .hadamard,
+            .qubits = op.qubits[0..1],
+            .parameters = &[_]f64{},
+            .gate_sequence = null,
+            .timestamp = std.time.timestamp(),
+        });
+
+        try self.verifyCoherence("Teleport");
     }
 
-    /// ✨ Perform qubit swap
+    /// ✨ Perform qubit swap with GLIMMER optimization
     fn performSwap(self: *Self, op: *const QuantumOperation) !void {
-        _ = self;
-        _ = op;
-        // Implementation pending
+        try glimmer.setOptimization(.quantum_swap);
+
+        if (op.qubits.len != 2) return error.InvalidQubitCount;
+
+        // Implement swap using three CNOT gates
+        for (0..3) |_| {
+            try self.applyCNOT(&QuantumOperation{
+                .id = 0,
+                .op_type = .cnot,
+                .qubits = op.qubits[0..2],
+                .parameters = &[_]f64{},
+                .gate_sequence = null,
+                .timestamp = std.time.timestamp(),
+            });
+        }
+
+        try self.verifyCoherence("Swap");
     }
-};
+
+    /// 🌌 Verify quantum coherence after operation
+    fn verifyCoherence(self: *Self, op_name: []const u8) !void {
+        const coherence = try self.quantum_state.measure();
+        if (coherence < self.coherence_threshold) {
+            std.log.warn("⚠️ Low coherence after {s} operation: {d:.4}", .{op_name, coherence});
+            return error.DecoherenceError;
+        }
+        std.log.info("✨ {s} operation completed - Coherence: {d:.4}", .{op_name, coherence});
+    }
 
 /// Quantum operation errors
 pub const QuantumError = error{
