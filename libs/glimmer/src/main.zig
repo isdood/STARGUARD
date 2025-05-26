@@ -7,11 +7,12 @@
 const std = @import("std");  // Add missing import
 
 pub const OptimizationPattern = enum {
-    quantum_init,      // 💫 Quantum initialization
-    quantum_measure,   // 🌟 Quantum measurement
-    quantum_calibrate, // ✨ Quantum calibration
-    pattern_align,     // 🎇 Pattern alignment
-    crystal_sync,      // 💠 Crystal synchronization
+    quantum_measure,
+    quantum_calibrate,
+    pattern_sync,
+    pattern_align,
+    state_update,
+    // quantum_state is not defined here
 };
 
 /// 🌟 GLIMMER Enhancement Interface
