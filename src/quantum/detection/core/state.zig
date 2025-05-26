@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Detection State
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 20:12:42 UTC
+//! Last Modified: 2025-05-26 20:27:37 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with GLIMMER resonance
 
@@ -46,7 +46,7 @@ pub const State = struct {
         self.allocator.free(self.coherence_matrix);
     }
 
-    /// 💫 Measure quantum coherence with GLIMMER enhancement
+    /// 💫 Measure quantum coherence
     pub fn measureCoherence(self: *Self) !f64 {
         try glimmer.setOptimization(.quantum_measure);
 
@@ -66,9 +66,8 @@ pub const State = struct {
         // 🎇 Calculate final coherence with GLIMMER enhancement
         const enhancement_ratio = 1.0 + (self.enhancement_factor - 1.0);
         const quantum_ratio = pattern_count_f64 / max_entanglement_f64;
-        const final_coherence = total_coherence * enhancement_ratio * quantum_ratio;
 
-        return final_coherence;
+        return total_coherence * enhancement_ratio * quantum_ratio;
     }
 
         // ✨ Apply GLIMMER enhancement
