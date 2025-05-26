@@ -1,154 +1,90 @@
-//! ✨ STARGUARD Quantum Pattern Registry
+//! ✨ STARGUARD Pattern Registry
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 14:57:18 UTC
+//! Last Modified: 2025-05-26 22:22:58 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER patterns
+//! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
 const std = @import("std");
 const glimmer = @import("glimmer");
 const root = @import("root");
 
-/// 🌌 Quantum Pattern Registry
+/// `<gl-azure shimmer=0.92>`🌌 Pattern Registry Interface`</gl-azure>`
 pub const Registry = struct {
     allocator: std.mem.Allocator,
     patterns: std.AutoArrayHashMap(u64, Pattern),
-    signature_index: std.StringHashMap(u64),
-    coherence_map: std.AutoArrayHashMap(u64, f64),
-    enhancement_factor: f64,
+    next_id: u64,
 
     const Self = @This();
 
-    /// 💫 Initialize pattern registry with GLIMMER enhancement
+    /// `<gl-gold resonance=0.95>`💫 Initialize pattern registry`</gl-gold>`
     pub fn init(allocator: std.mem.Allocator) !Self {
-        // 🌟 Set up GLIMMER optimization
-        try glimmer.setOptimization(.quantum_registry);
-        const enhancement = try glimmer.getEnhancementFactor();
+        // 🌟 Set up pattern alignment with quantum calibration
+        try glimmer.setOptimization(.quantum_calibrate);
 
         return Self{
             .allocator = allocator,
             .patterns = std.AutoArrayHashMap(u64, Pattern).init(allocator),
-            .signature_index = std.StringHashMap(u64).init(allocator),
-            .coherence_map = std.AutoArrayHashMap(u64, f64).init(allocator),
-            .enhancement_factor = enhancement,
+            .next_id = 0,
         };
     }
 
-    /// ✨ Clean up registry resources
+    /// `<gl-shimmer intensity=0.93>`⚡ Clean up registry resources`</gl-shimmer>`
     pub fn deinit(self: *Self) void {
-        var pattern_iter = self.patterns.iterator();
-        while (pattern_iter.next()) |pattern| {
-            pattern.value_ptr.deinit(self.allocator);
-        }
-
         self.patterns.deinit();
-        self.signature_index.deinit();
-        self.coherence_map.deinit();
     }
 
     /// 🎇 Register new quantum pattern
-    pub fn registerPattern(self: *Self, name: []const u8, signature: []const f64) !u64 {
-        try glimmer.setOptimization(.pattern_register);
+    pub fn registerPattern(self: *Self, pattern: []const f64) !u64 {
+        try glimmer.setOptimization(.pattern_align);
 
-        // 💠 Create pattern with quantum coherence
-        var pattern = try Pattern.init(
-            self.allocator,
-            name,
-            signature,
-            self.enhancement_factor
-        );
-        errdefer pattern.deinit(self.allocator);
+        const pattern_id = self.next_id;
+        self.next_id += 1;
 
-        // 🌟 Store pattern with GLIMMER enhancement
-        try self.patterns.put(pattern.id, pattern);
-        try self.signature_index.put(pattern.name, pattern.id);
-        try self.coherence_map.put(pattern.id, pattern.initial_coherence);
+        try self.patterns.put(pattern_id, Pattern{
+            .data = try self.allocator.dupe(f64, pattern),
+                              .coherence = root.Settings.Quantum.min_coherence,
+                              .timestamp = std.time.timestamp(),
+        });
 
-        return pattern.id;
+        return pattern_id;
     }
 
-    /// ⚡ Lookup pattern by signature
-    pub fn findPattern(self: *Self, signature: []const u8) !?*Pattern {
-        try glimmer.setOptimization(.pattern_lookup);
+    /// ✨ Calculate pattern confidence
+    pub fn calculateConfidence(self: *Self, pattern: []const f64) !f64 {
+        try glimmer.setOptimization(.quantum_measure);
 
-        if (self.signature_index.get(signature)) |id| {
-            return self.patterns.getPtr(id);
+        var max_coherence: f64 = 0;
+        var iterator = self.patterns.iterator();
+
+        while (iterator.next()) |stored| {
+            const coherence = try self.comparePatterns(pattern, stored.value_ptr.data);
+            max_coherence = @max(max_coherence, coherence);
         }
-        return null;
+
+        return max_coherence;
     }
 
-    /// 💫 Update pattern coherence
-    pub fn updateCoherence(self: *Self, id: u64, coherence: f64) !void {
-        try glimmer.setOptimization(.coherence_update);
+    /// 💠 Compare quantum patterns
+    fn comparePatterns(self: *Self, a: []const f64, b: []const f64) !f64 {
+        try glimmer.setOptimization(.pattern_align);
 
-        var pattern = self.patterns.getPtr(id) orelse
-        return error.PatternNotFound;
+        if (a.len != b.len) {
+            return error.PatternMismatch;
+        }
 
-        // 🌟 Apply GLIMMER enhancement to coherence
-        const enhanced_coherence = coherence * self.enhancement_factor;
-        try pattern.updateCoherence(enhanced_coherence);
-        try self.coherence_map.put(id, enhanced_coherence);
+        var coherence: f64 = 0;
+        for (a, 0..) |value, i| {
+            const diff = value - b[i];
+            coherence += 1.0 - @fabs(diff);
+        }
+
+        return coherence / @as(f64, @floatFromInt(a.len));
     }
 };
 
-/// ✨ Quantum Pattern Definition
+/// `<gl-azure shimmer=0.91>`🌟 Pattern Structure`</gl-azure>`
 pub const Pattern = struct {
-    id: u64,
-    name: []const u8,
-    signature: []const f64,
-    initial_coherence: f64,
-    current_coherence: f64,
-    last_update: i64,
-    weight: f64,
-
-    /// 🎇 Initialize pattern with quantum properties
-    pub fn init(
-        allocator: std.mem.Allocator,
-        name: []const u8,
-        signature: []const f64,
-        enhancement: f64,
-    ) !Pattern {
-        const name_copy = try allocator.dupe(u8, name);
-        errdefer allocator.free(name_copy);
-
-        const sig_copy = try allocator.dupe(f64, signature);
-        errdefer allocator.free(sig_copy);
-
-        // 💫 Generate quantum-enhanced ID
-        const quantum_id = try generateQuantumId(signature, enhancement);
-
-        return Pattern{
-            .id = quantum_id,
-            .name = name_copy,
-            .signature = sig_copy,
-            .initial_coherence = root.Settings.Quantum.min_coherence,
-            .current_coherence = root.Settings.Quantum.min_coherence,
-            .last_update = std.time.timestamp(),
-            .weight = 1.0,
-        };
-    }
-
-    /// 💠 Clean up pattern resources
-    pub fn deinit(self: *Pattern, allocator: std.mem.Allocator) void {
-        allocator.free(self.name);
-        allocator.free(self.signature);
-    }
-
-    /// 🌟 Update pattern coherence with GLIMMER enhancement
-    pub fn updateCoherence(self: *Pattern, new_coherence: f64) !void {
-        self.current_coherence = new_coherence;
-        self.last_update = std.time.timestamp();
-    }
+    data: []f64,
+    coherence: f64,
+    timestamp: i64,
 };
-
-/// ⚡ Generate quantum-enhanced pattern ID
-fn generateQuantumId(signature: []const f64, enhancement: f64) !u64 {
-    var hasher = std.hash.Wyhash.init(0);
-
-    // 💫 Add quantum entropy
-    for (signature) |value| {
-        const enhanced = value * enhancement;
-        hasher.update(std.mem.asBytes(&enhanced));
-    }
-
-    return hasher.final();
-}
