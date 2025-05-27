@@ -27,16 +27,50 @@ end
 set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
 mkdir -p $plasmoid_path/{contents/{ui,config},data}
 
+# `<gl-shimmer color="#ffd700">`Insert the metadata.desktop creation here:`</gl-shimmer>`
+set -l metadata_file $plasmoid_path/metadata.desktop
+echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
+
+echo '[Desktop Entry]
+Name=STARGUARD Quantum Protection
+Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-PluginInfo-Name=org.kde.starguard
+X-KDE-PluginInfo-Category=System Services
+X-KDE-PluginInfo-Author=@isdood
+X-KDE-PluginInfo-Email=isdood@quantum.guard
+X-KDE-PluginInfo-Version=0.13.0
+X-KDE-PluginInfo-Website=https://github.com/isdood/STARGUARD
+X-KDE-PluginInfo-License=MIT
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-Provides=org.kde.plasma.systemmonitor
+
+# `<gl-crystal color="#4169e1">`Plasma 6 specific declarations`</gl-crystal>`
+X-Plasma-Framework-Version=6
+X-KDE-FormFactors=desktop,tablet,handset
+X-Plasma-NotificationAreaCategory=SystemServices
+X-KDE-ParentApp=org.kde.plasmashell
+
+# `<gl-shimmer color="#00ffff">`Required KF6 dependencies`</gl-shimmer>`
+X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
+X-Plasma-RequiredQtVersion=6.0' > $metadata_file
+
 # `<gl-crystal color="#4169e1">`Create QML interface`</gl-crystal>`
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-echo 'import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
-import org.kde.plasma.plasmoid
-import org.kde.plasma.core as PlasmaCore
-import org.kde.plasma.components as PlasmaComponents
+echo 'import QtQuick 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
+import org.kde.plasma.plasmoid 2.0
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.kirigami 2.20 as Kirigami'
 
 PlasmoidItem {
     id: root
@@ -45,13 +79,13 @@ PlasmoidItem {
     property int glimmerIndex: 0
     property bool quantumProtection: true
 
-    switchWidth: units.gridUnit * 10
-    switchHeight: units.gridUnit * 10
+    switchWidth: Kirigami.Units.gridUnit * 10
+    switchHeight: Kirigami.Units.gridUnit * 10
 
-    Layout.minimumWidth: units.gridUnit * 12
-    Layout.minimumHeight: units.gridUnit * 12
-    Layout.preferredWidth: units.gridUnit * 14
-    Layout.preferredHeight: units.gridUnit * 14
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 12
+    Layout.minimumHeight: Kirigami.Units.gridUnit * 12
+    Layout.preferredWidth: Kirigami.Units.gridUnit * 14
+    Layout.preferredHeight: Kirigami.Units.gridUnit * 14
 
     compactRepresentation: PlasmaCore.IconItem {
         source: "security-high"
