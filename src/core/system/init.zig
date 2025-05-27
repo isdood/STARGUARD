@@ -1,6 +1,6 @@
 //! ✨ STARGUARD System Initialization
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 08:08:07 UTC
+//! Last Modified: 2025-05-27 08:13:26 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -23,6 +23,7 @@ pub const System = struct {
     is_initialized: bool,
     quantum_matrix: []f64,
     glimmer_matrix: ?[]f64,
+    protection_active: bool,
 
     const Self = @This();
 
@@ -50,6 +51,7 @@ pub const System = struct {
             .is_initialized = true,
             .quantum_matrix = quantum_matrix,
             .glimmer_matrix = null,
+            .protection_active = false,
         };
     }
 
@@ -71,8 +73,44 @@ pub const System = struct {
         self.glimmer_matrix = matrix;
     }
 
+    /// `<gl-shimmer intensity=0.95>`⚡ Start protection cycle`</gl-shimmer>`
+    pub fn startProtectionCycle(self: *Self) !void {
+        if (!self.is_initialized or self.glimmer_matrix == null) {
+            return error.SystemNotInitialized;
+        }
+
+        try glimmer.setOptimization(.quantum_measure);
+        self.protection_active = true;
+
+        // 🌟 Initialize protection loop
+        const stdout = std.io.getStdOut().writer();
+        try stdout.print("`<gl-crystal intensity=0.93>`💫 Protection cycle activated with {d} quantum patterns`</gl-crystal>`\n",
+                         .{root.Settings.Quantum.max_entanglement});
+
+        while (self.protection_active) {
+            // 💠 Synchronize quantum states
+            try self.synchronizeQuantumStates();
+
+            // ✨ Wait for next scan interval
+            std.time.sleep(root.Settings.Threat.scan_interval_ms * std.time.ns_per_ms);
+        }
+    }
+
+    /// `<gl-azure shimmer=0.94>`💫 Synchronize quantum states`</gl-azure>`
+    fn synchronizeQuantumStates(self: *Self) !void {
+        try glimmer.setOptimization(.pattern_align);
+
+        if (self.glimmer_matrix) |matrix| {
+            for (matrix, 0..) |*cell, i| {
+                const quantum_index = i % self.quantum_matrix.len;
+                cell.* = (cell.* + self.quantum_matrix[quantum_index]) * 0.5;
+            }
+        }
+    }
+
     /// `<gl-shimmer intensity=0.93>`⚡ Clean up system resources`</gl-shimmer>`
     pub fn deinit(self: *Self) void {
+        self.protection_active = false;
         if (self.glimmer_matrix) |matrix| {
             self.allocator.free(matrix);
         }
