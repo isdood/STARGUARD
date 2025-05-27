@@ -2,49 +2,64 @@
 
 # STARGUARD Installation Script
 # Version: 0.13.0
-# Last Modified: 2025-05-27 10:32:49 UTC
+# Last Modified: 2025-05-27 10:44:54 UTC
 # Author: @isdood
 # Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
-# `<gl-azure shimmer=0.92>`Define ANSI color codes for GLIMMER enhancement`</gl-azure>`
-CYAN='\033[0;36m'
-GOLD='\033[0;33m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
+# `<gl-prism color="quantum-azure" intensity=0.92>`Define quantum-enhanced color codes`</gl-prism>`
+CYAN='\033[0;36m'      # `<gl-shimmer intensity=0.91>`Quantum state indicators`</gl-shimmer>`
+GOLD='\033[0;33m'      # `<gl-crystal intensity=0.91>`GLIMMER resonance markers`</gl-crystal>`
+BLUE='\033[0;34m'      # `<gl-azure intensity=0.91>`System coherence status`</gl-azure>`
+GREEN='\033[0;32m'     # `<gl-emerald intensity=0.91>`Success indicators`</gl-emerald>`
+RED='\033[0;31m'       # `<gl-ruby intensity=0.91>`Error notifications`</gl-ruby>`
+NC='\033[0m'           # Reset quantum state
 
-# `<gl-crystal intensity=0.93>`Error handling function`</gl-crystal>`
+# `<gl-crystal intensity=0.93>`Quantum error handling`</gl-crystal>`
 handle_error() {
-    echo -e "${RED}❌ Error: $1${NC}"
+    echo -e "${RED}❌ Quantum coherence disrupted: $1${NC}"
+    cleanup
     exit 1
 }
 
-# Cleanup function
+# `<gl-azure shimmer=0.92>`Quantum cleanup protocols`</gl-azure>`
 cleanup() {
-    rm -f check_deps.zig check_deps
+    if [ -f "check_deps.zig" ] || [ -f "check_deps" ]; then
+        echo -e "${BLUE}💫 Cleaning up quantum residuals...${NC}"
+        rm -f check_deps.zig check_deps
+    fi
 }
 
-# Set up trap for cleanup
+# Initialize quantum safeguards
 trap cleanup EXIT INT TERM
 
-echo -e "${CYAN}✨ Initializing STARGUARD Quantum Protection System installation...${NC}"
+echo -e "${CYAN}✨ Initializing STARGUARD Quantum Protection System (v0.13.0)...${NC}"
 
-# `<gl-gold resonance=0.93>`Check for root privileges`</gl-gold>`
+# `<gl-gold resonance=0.93>`Verify quantum access privileges`</gl-gold>`
 if [[ $EUID -ne 0 ]]; then
-    echo -e "${GOLD}🌟 Elevating privileges for quantum installation...${NC}"
+    echo -e "${GOLD}🌟 Elevating quantum privileges...${NC}"
     exec sudo "$0" "$@"
 fi
 
-# `<gl-azure shimmer=0.94>`Install base dependencies first`</gl-azure>`
-echo -e "${BLUE}💫 Installing core dependencies...${NC}"
-pacman -Syu --noconfirm || handle_error "System update failed"
-pacman -S --needed --noconfirm zig || handle_error "Failed to install Zig"
+# `<gl-shimmer intensity=0.94>`Verify system coherence`</gl-shimmer>`
+echo -e "${BLUE}💫 Analyzing system quantum state...${NC}"
+if ! command -v pacman >/dev/null 2>&1; then
+    handle_error "System incoherent: pacman not found. STARGUARD requires an Arch-based system."
+fi
 
-# `<gl-prism color="quantum-azure">`Initialize dependency checking`</gl-prism>`
+# `<gl-crystal intensity=0.94>`Initialize quantum package manager`</gl-crystal>`
+echo -e "${BLUE}💫 Synchronizing quantum repositories...${NC}"
+pacman -Syu --noconfirm || handle_error "Quantum synchronization failed"
+
+# `<gl-azure shimmer=0.95>`Install core quantum dependencies`</gl-azure>`
+echo -e "${CYAN}✨ Installing quantum compiler...${NC}"
+pacman -S --needed --noconfirm zig || handle_error "Failed to install quantum compiler (zig)"
+
+# `<gl-prism color="quantum-azure" intensity=0.96>`Initialize dependency verification`</gl-prism>`
 echo -e "${BLUE}💫 Verifying quantum dependencies...${NC}"
 
-# Create temporary Zig script for dependency checking
+# Create temporary quantum verification script
 cat > check_deps.zig << 'EOL'
+//! 💫 STARGUARD Quantum Dependency Verifier
 const std = @import("std");
 const deps = @import("src/core/system/dependencies.zig");
 
@@ -56,75 +71,57 @@ pub fn main() !void {
     defer dep_manager.deinit();
 
     try dep_manager.checkDependencies();
-
-    const stdout = std.io.getStdOut().writer();
-
-    // Install missing dependencies
-    for (dep_manager.status_list.items) |pkg| {
-        if (!pkg.installed) {
-            try stdout.print("Installing {s}...\n", .{pkg.name});
-            var child = std.process.Child.init(
-                &[_][]const u8{ "pacman", "-S", "--needed", "--noconfirm", pkg.name },
-                gpa.allocator()
-            );
-            try child.spawn();
-            const result = try child.wait();
-
-            if (result != 0) {
-                try stdout.print("Failed to install {s}\n", .{pkg.name});
-                return error.InstallationFailed;
-            }
-        }
-    }
 }
 EOL
 
-# Compile and run dependency checker
-echo -e "${CYAN}✨ Compiling dependency checker...${NC}"
-zig build-exe check_deps.zig -I src/ || handle_error "Failed to compile dependency checker"
-./check_deps || handle_error "Dependency installation failed"
+# `<gl-gold resonance=0.95>`Compile and execute quantum verifier`</gl-gold>`
+echo -e "${CYAN}✨ Initializing quantum verification...${NC}"
+zig build-exe check_deps.zig -I src/ || handle_error "Quantum verification compilation failed"
+./check_deps || handle_error "Quantum dependency verification failed"
 
-# `<gl-shimmer intensity=0.92>`Create quantum configuration directory`</gl-shimmer>`
-echo -e "${CYAN}✨ Creating quantum configuration space...${NC}"
-mkdir -p /etc/starguard
-mkdir -p /var/lib/starguard/patterns
+# `<gl-shimmer intensity=0.96>`Create quantum configuration matrix`</gl-shimmer>`
+echo -e "${CYAN}✨ Establishing quantum configuration space...${NC}"
+mkdir -p /etc/starguard /var/lib/starguard/{patterns,cache,logs}
 
-# `<gl-azure shimmer=0.93>`Set correct permissions`</gl-azure>`
-chown -R root:root /etc/starguard
+# `<gl-crystal intensity=0.96>`Set quantum security protocols`</gl-crystal>`
+echo -e "${BLUE}💫 Configuring quantum security barriers...${NC}"
+chown -R root:root /etc/{starguard,systemd/system/starguard.service}
 chmod -R 750 /etc/starguard
 chown -R root:root /var/lib/starguard
 chmod -R 750 /var/lib/starguard
 
-# `<gl-gold resonance=0.94>`Build project with quantum optimizations`</gl-gold>`
-echo -e "${GOLD}🌟 Building STARGUARD with GLIMMER enhancement...${NC}"
-zig build -Drelease-safe
+# `<gl-azure shimmer=0.97>`Build quantum core`</gl-azure>`
+echo -e "${GOLD}🌟 Initiating GLIMMER-enhanced quantum compilation...${NC}"
+zig build -Drelease-safe || handle_error "Quantum core compilation failed"
 
-# `<gl-crystal intensity=0.95>`Install binary and service`</gl-crystal>`
-echo -e "${BLUE}💫 Installing quantum protection components...${NC}"
-cp zig-out/bin/starguard /usr/local/bin/
-chmod 755 /usr/local/bin/starguard
+# `<gl-prism color="quantum-gold" intensity=0.97>`Deploy quantum binary`</gl-prism>`
+echo -e "${BLUE}💫 Deploying quantum protection matrix...${NC}"
+install -Dm755 zig-out/bin/starguard /usr/local/bin/starguard || handle_error "Binary deployment failed"
 
-# `<gl-shimmer intensity=0.96>`Configure systemd service`</gl-shimmer>`
-cp starguard.service /etc/systemd/system/
+# `<gl-crystal intensity=0.98>`Initialize quantum service`</gl-crystal>`
+echo -e "${CYAN}✨ Activating quantum protection service...${NC}"
 systemctl daemon-reload
-systemctl enable starguard.service
-systemctl start starguard.service
+systemctl enable --now starguard || handle_error "Service activation failed"
 
-# `<gl-azure shimmer=0.97>`Verify installation`</gl-azure>`
+# `<gl-shimmer intensity=0.98>`Verify quantum coherence`</gl-shimmer>`
 if systemctl is-active --quiet starguard; then
-    echo -e "${CYAN}✨ STARGUARD quantum protection successfully initialized!${NC}"
-    echo -e "${GOLD}🌟 Monitor quantum patterns with: journalctl -u starguard -f${NC}"
-    echo -e "${BLUE}💫 System coherence established. GLIMMER enhancement active.${NC}"
+    echo -e "${GREEN}✨ STARGUARD quantum protection matrix initialized successfully!${NC}"
+    echo -e "${GOLD}🌟 Monitor quantum patterns: ${CYAN}journalctl -u starguard -f${NC}"
+    echo -e "${BLUE}💫 System coherence established at $(date -u +"%Y-%m-%d %H:%M:%S") UTC${NC}"
 else
-    echo -e "\033[0;31m❌ Error: STARGUARD service failed to start. Check logs with: journalctl -u starguard -xe\033[0m"
-    exit 1
+    handle_error "Quantum protection service failed to achieve coherence"
 fi
 
-# `<gl-crystal intensity=0.98>`Configure fish shell for quantum enhancement`</gl-crystal>`
+# `<gl-azure shimmer=0.99>`Configure quantum shell integration`</gl-azure>`
 if command -v fish >/dev/null 2>&1; then
-    echo -e "${CYAN}✨ Configuring fish shell quantum integration...${NC}"
+    echo -e "${CYAN}✨ Harmonizing fish shell with quantum matrix...${NC}"
     mkdir -p /etc/fish/conf.d
-    echo '# STARGUARD Fish Integration
+    cat > /etc/fish/conf.d/starguard.fish << 'EOL'
+# 🌟 STARGUARD Quantum Integration
 set -x STARGUARD_HOME /var/lib/starguard
-fish_add_path /usr/local/bin' > /etc/fish/conf.d/starguard.fish
+set -x STARGUARD_QUANTUM_LEVEL 0.95
+fish_add_path /usr/local/bin
+EOL
 fi
+
+echo -e "${GREEN}✨ Quantum installation complete! System protected by STARGUARD ${CYAN}v0.13.0${NC}"

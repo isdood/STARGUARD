@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Dependency Management
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 10:35:02 UTC
+//! Last Modified: 2025-05-27 10:39:45 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -69,16 +69,25 @@ pub const DependencyManager = struct {
 
         try child.spawn();
 
-        const result = try child.wait();
-        const stdout = if (child.stdout) |stdout| try stdout.reader().readAllAlloc(self.allocator, 4096) else "";
+        const term = try child.wait();
+        const stdout = if (child.stdout) |stdout|
+        try stdout.reader().readAllAlloc(self.allocator, 4096)
+        else
+            "";
         defer if (stdout.len > 0) self.allocator.free(stdout);
 
-        return PackageStatus{
-            .name = package_name,
-            .installed = result == 0,
-            .version = if (result == 0) try self.parseVersion(stdout) else null,
-            .required_version = getRequiredVersion(package_name),
+        // Check if the process exited successfully
+        const is_installed = switch (term) {
+            .Exited => |code| code == 0,
+            else => false,
         };
+
+            return PackageStatus{
+                .name = package_name,
+                .installed = is_installed,
+                .version = if (is_installed) try self.parseVersion(stdout) else null,
+                .required_version = getRequiredVersion(package_name),
+            };
     }
 
     /// `<gl-prism color="glimmer-gold">`🎇 Parse package version from pacman output`</gl-prism>`
