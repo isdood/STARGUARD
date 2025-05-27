@@ -1,15 +1,15 @@
-//! ✨ STARGUARD Main Entry Point
+//! ✨ STARGUARD Main Entry
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 22:10:30 UTC
+//! Last Modified: 2025-05-27 08:11:29 UTC
 //! Author: @isdood
-//! Enhanced by STARWEAVE with GLIMMER resonance
+//! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
 const std = @import("std");
 const glimmer = @import("glimmer");
-const core = @import("core/system/init.zig");
 const quantum = @import("quantum/detection/core/detector.zig");
+const core = @import("core/system/init.zig"); // Added missing import
 
-/// 🌌 Global Settings Configuration
+/// `<gl-azure shimmer=0.92>`🌌 Global Settings Configuration`</gl-azure>`
 pub const Settings = struct {
     /// 💫 Quantum Configuration
     pub const Quantum = struct {
@@ -35,6 +35,7 @@ pub const Settings = struct {
         pub const quantum_resonance: f64 = 0.92;
         pub const crystal_coherence: f64 = 0.89;
         pub const weave_strength: f64 = 0.95;
+        pub const matrix_size: usize = 128; // Added missing matrix size constant
     };
 };
 
@@ -44,7 +45,7 @@ pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
     try stdout.print("✨ STARGUARD Quantum Protection System v0.13.0\n", .{});
 
-    // 🌟 Set up GLIMMER optimization with quantum patterns
+    // 🌟 Initialize GLIMMER patterns with quantum calibration
     try glimmer.setOptimization(.quantum_calibrate);
 
     // 🎇 Initialize quantum core with GLIMMER enhancement

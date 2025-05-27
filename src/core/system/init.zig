@@ -1,6 +1,6 @@
 //! ✨ STARGUARD System Initialization
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 08:06:25 UTC
+//! Last Modified: 2025-05-27 08:08:07 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -59,10 +59,11 @@ pub const System = struct {
             self.allocator.free(self.glimmer_matrix.?);
         }
 
-        var matrix = try self.allocator.alloc(f64, root.Settings.Glimmer.matrix_size);
+        // ⚡ Allocate GLIMMER matrix with immutability
+        const matrix = try self.allocator.alloc(f64, root.Settings.Glimmer.matrix_size);
         errdefer self.allocator.free(matrix);
 
-        // ⚡ Initialize GLIMMER patterns with crystal coherence
+        // 💠 Initialize GLIMMER patterns with crystal coherence
         for (matrix) |*cell| {
             cell.* = crystal_coherence * self.config.enhancement_factor;
         }
