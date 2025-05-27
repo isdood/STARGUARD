@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Dependency Management
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 10:39:45 UTC
+//! Last Modified: 2025-05-27 10:46:53 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -50,6 +50,11 @@ pub const DependencyManager = struct {
     }
 
     pub fn deinit(self: *Self) void {
+        for (self.status_list.items) |status| {
+            if (status.version) |version| {
+                self.allocator.free(version);
+            }
+        }
         self.status_list.deinit();
     }
 
@@ -76,7 +81,6 @@ pub const DependencyManager = struct {
             "";
         defer if (stdout.len > 0) self.allocator.free(stdout);
 
-        // Check if the process exited successfully
         const is_installed = switch (term) {
             .Exited => |code| code == 0,
             else => false,
@@ -96,7 +100,10 @@ pub const DependencyManager = struct {
         if (std.mem.indexOf(u8, output, version_prefix)) |index| {
             const version_start = index + version_prefix.len;
             if (std.mem.indexOf(u8, output[version_start..], "\n")) |end| {
-                return try std.mem.dupe(self.allocator, u8, output[version_start..][0..end]);
+                const version_slice = output[version_start..][0..end];
+                const version_copy = try self.allocator.alloc(u8, version_slice.len);
+                @memcpy(version_copy[0..], version_slice);
+                return version_copy;
             }
         }
         return null;
