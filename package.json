@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "isdood@quantum.guard",
+                "Name": "@isdood"
+            }
+        ],
+        "Category": "System Services",
+        "Description": "✨ A cutting-edge, quantum-powered sentinel for your PC - Open-source protection evolved. 🛡️",
+        "EnabledByDefault": true,
+        "Icon": "security-high",
+        "Id": "org.kde.starguard",
+        "License": "MIT",
+        "Name": "STARGUARD Quantum Protection",
+        "ServiceTypes": [
+            "Plasma/Applet"
+        ],
+        "Version": "0.13.0",
+        "Website": "https://github.com/isdood/STARGUARD"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0"
+}
