@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Dependency Management
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 10:48:42 UTC
+//! Last Modified: 2025-05-27 10:51:23 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -15,6 +15,15 @@ pub const DependencyManager = struct {
         installed: bool,
         version: ?[]const u8,
         required_version: ?[]const u8,
+
+        fn deinit(self: *PackageStatus, allocator: std.mem.Allocator) void {
+            if (self.version) |version| {
+                allocator.free(version);
+            }
+            if (self.required_version) |req_version| {
+                allocator.free(req_version);
+            }
+        }
     };
 
     const Self = @This();
@@ -55,10 +64,8 @@ pub const DependencyManager = struct {
     }
 
     pub fn deinit(self: *Self) void {
-        for (self.status_list.items) |status| {
-            if (status.version) |version| {
-                self.allocator.free(version);
-            }
+        for (self.status_list.items) |*status| {
+            status.deinit(self.allocator);
         }
         self.status_list.deinit();
     }
@@ -95,7 +102,7 @@ pub const DependencyManager = struct {
                 .name = package_name,
                 .installed = is_installed,
                 .version = if (is_installed) try self.parseVersion(stdout) else null,
-                .required_version = self.getRequiredVersion(package_name),
+                .required_version = try self.getRequiredVersion(package_name),
             };
     }
 
@@ -115,10 +122,10 @@ pub const DependencyManager = struct {
     }
 
     /// `<gl-crystal color="quantum-azure">`💫 Get required version for package`</gl-crystal>`
-    fn getRequiredVersion(self: *Self, package_name: []const u8) ?[]const u8 {
+    fn getRequiredVersion(self: *Self, package_name: []const u8) !?[]const u8 {
         for (CoreDeps.versions) |ver_info| {
             if (std.mem.eql(u8, ver_info.name, package_name)) {
-                const version_copy = self.allocator.alloc(u8, ver_info.version.len) catch return null;
+                const version_copy = try self.allocator.alloc(u8, ver_info.version.len);
                 @memcpy(version_copy[0..], ver_info.version);
                 return version_copy;
             }

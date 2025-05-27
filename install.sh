@@ -90,9 +90,9 @@ chmod -R 750 /etc/starguard
 chown -R root:root /var/lib/starguard
 chmod -R 750 /var/lib/starguard
 
-# `<gl-azure shimmer=0.97>`Build quantum core`</gl-azure>`
+# `<gl-gold resonance=0.94>`Build project with quantum optimizations`</gl-gold>`
 echo -e "${GOLD}🌟 Initiating GLIMMER-enhanced quantum compilation...${NC}"
-zig build -Drelease-safe || handle_error "Quantum core compilation failed"
+zig build -Doptimize=ReleaseSafe || handle_error "Quantum core compilation failed"
 
 # `<gl-prism color="quantum-gold" intensity=0.97>`Deploy quantum binary`</gl-prism>`
 echo -e "${BLUE}💫 Deploying quantum protection matrix...${NC}"
