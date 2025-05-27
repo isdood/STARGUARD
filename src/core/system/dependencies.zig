@@ -1,11 +1,13 @@
 //! ✨ STARGUARD Dependency Management
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 10:30:27 UTC
+//! Last Modified: 2025-05-27 10:35:02 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
 const std = @import("std");
 const root = @import("root");
+const Child = std.process.Child;
+const ChildProcess = std.process.Child;
 
 pub const DependencyManager = struct {
     const PackageStatus = struct {
@@ -61,24 +63,37 @@ pub const DependencyManager = struct {
 
     /// `<gl-crystal color="quantum-blue">`✨ Check individual package status`</gl-crystal>`
     fn checkPackage(self: *Self, package_name: []const u8) !PackageStatus {
-        const result = try std.ChildProcess.exec(.{
-            .allocator = self.allocator,
-            .argv = &[_][]const u8{ "pacman", "-Qi", package_name },
-        });
-        defer {
-            self.allocator.free(result.stdout);
-            self.allocator.free(result.stderr);
-        }
+        var child = Child.init(&[_][]const u8{ "pacman", "-Qi", package_name }, self.allocator);
+        child.stderr_behavior = .Ignore;
+        child.stdout_behavior = .Pipe;
+
+        try child.spawn();
+
+        const result = try child.wait();
+        const stdout = if (child.stdout) |stdout| try stdout.reader().readAllAlloc(self.allocator, 4096) else "";
+        defer if (stdout.len > 0) self.allocator.free(stdout);
 
         return PackageStatus{
             .name = package_name,
-            .installed = result.term.Exited == 0,
-            .version = if (result.term.Exited == 0) try self.parseVersion(result.stdout) else null,
+            .installed = result == 0,
+            .version = if (result == 0) try self.parseVersion(stdout) else null,
             .required_version = getRequiredVersion(package_name),
         };
     }
 
-    /// `<gl-prism color="glimmer-gold">`🎇 Get package version requirements`</gl-prism>`
+    /// `<gl-prism color="glimmer-gold">`🎇 Parse package version from pacman output`</gl-prism>`
+    fn parseVersion(self: *Self, output: []const u8) !?[]const u8 {
+        const version_prefix = "Version         : ";
+        if (std.mem.indexOf(u8, output, version_prefix)) |index| {
+            const version_start = index + version_prefix.len;
+            if (std.mem.indexOf(u8, output[version_start..], "\n")) |end| {
+                return try std.mem.dupe(self.allocator, u8, output[version_start..][0..end]);
+            }
+        }
+        return null;
+    }
+
+    /// `<gl-crystal color="quantum-azure">`💫 Get required version for package`</gl-crystal>`
     fn getRequiredVersion(package_name: []const u8) ?[]const u8 {
         inline for (@typeInfo(CoreDeps.versions).Struct.fields) |field| {
             if (std.mem.eql(u8, field.name, package_name)) {

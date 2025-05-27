@@ -63,15 +63,14 @@ pub fn main() !void {
     for (dep_manager.status_list.items) |pkg| {
         if (!pkg.installed) {
             try stdout.print("Installing {s}...\n", .{pkg.name});
-            const result = try std.ChildProcess.exec(.{
-                .allocator = gpa.allocator(),
-                .argv = &[_][]const u8{ "pacman", "-S", "--needed", "--noconfirm", pkg.name },
-            });
-            defer {
-                gpa.allocator().free(result.stdout);
-                gpa.allocator().free(result.stderr);
-            }
-            if (result.term.Exited != 0) {
+            var child = std.process.Child.init(
+                &[_][]const u8{ "pacman", "-S", "--needed", "--noconfirm", pkg.name },
+                gpa.allocator()
+            );
+            try child.spawn();
+            const result = try child.wait();
+
+            if (result != 0) {
                 try stdout.print("Failed to install {s}\n", .{pkg.name});
                 return error.InstallationFailed;
             }
