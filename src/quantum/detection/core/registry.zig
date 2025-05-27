@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Pattern Registry
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 22:22:58 UTC
+//! Last Modified: 2025-05-26 22:42:34 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -75,7 +75,8 @@ pub const Registry = struct {
         var coherence: f64 = 0;
         for (a, 0..) |value, i| {
             const diff = value - b[i];
-            coherence += 1.0 - @fabs(diff);
+            // Using std.math.absFloat instead of @fabs
+            coherence += 1.0 - std.math.absFloat(diff);
         }
 
         return coherence / @as(f64, @floatFromInt(a.len));
