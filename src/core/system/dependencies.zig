@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Dependency Management
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 10:46:53 UTC
+//! Last Modified: 2025-05-27 10:48:42 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -32,10 +32,15 @@ pub const DependencyManager = struct {
             "lld",
         };
 
-        pub const versions = .{
-            .zig = "0.13.0",
-            .fish = "3.7.0",
-            .llvm = "16.0.0",
+        pub const VersionInfo = struct {
+            name: []const u8,
+            version: []const u8,
+        };
+
+        pub const versions = [_]VersionInfo{
+            .{ .name = "zig", .version = "0.13.0" },
+            .{ .name = "fish", .version = "3.7.0" },
+            .{ .name = "llvm", .version = "16.0.0" },
         };
     };
 
@@ -90,7 +95,7 @@ pub const DependencyManager = struct {
                 .name = package_name,
                 .installed = is_installed,
                 .version = if (is_installed) try self.parseVersion(stdout) else null,
-                .required_version = getRequiredVersion(package_name),
+                .required_version = self.getRequiredVersion(package_name),
             };
     }
 
@@ -110,10 +115,12 @@ pub const DependencyManager = struct {
     }
 
     /// `<gl-crystal color="quantum-azure">`💫 Get required version for package`</gl-crystal>`
-    fn getRequiredVersion(package_name: []const u8) ?[]const u8 {
-        inline for (@typeInfo(CoreDeps.versions).Struct.fields) |field| {
-            if (std.mem.eql(u8, field.name, package_name)) {
-                return @field(CoreDeps.versions, field.name);
+    fn getRequiredVersion(self: *Self, package_name: []const u8) ?[]const u8 {
+        for (CoreDeps.versions) |ver_info| {
+            if (std.mem.eql(u8, ver_info.name, package_name)) {
+                const version_copy = self.allocator.alloc(u8, ver_info.version.len) catch return null;
+                @memcpy(version_copy[0..], ver_info.version);
+                return version_copy;
             }
         }
         return null;
