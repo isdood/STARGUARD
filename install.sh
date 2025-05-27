@@ -2,7 +2,7 @@
 
 # STARGUARD Installation Script
 # Version: 0.13.0
-# Last Modified: 2025-05-27 10:26:15 UTC
+# Last Modified: 2025-05-27 10:32:49 UTC
 # Author: @isdood
 # Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -10,28 +10,80 @@
 CYAN='\033[0;36m'
 GOLD='\033[0;33m'
 BLUE='\033[0;34m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
+
+# `<gl-crystal intensity=0.93>`Error handling function`</gl-crystal>`
+handle_error() {
+    echo -e "${RED}❌ Error: $1${NC}"
+    exit 1
+}
+
+# Cleanup function
+cleanup() {
+    rm -f check_deps.zig check_deps
+}
+
+# Set up trap for cleanup
+trap cleanup EXIT INT TERM
 
 echo -e "${CYAN}✨ Initializing STARGUARD Quantum Protection System installation...${NC}"
 
 # `<gl-gold resonance=0.93>`Check for root privileges`</gl-gold>`
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${GOLD}🌟 Elevating privileges for quantum installation...${NC}"
-   exec sudo "$0" "$@"
+    echo -e "${GOLD}🌟 Elevating privileges for quantum installation...${NC}"
+    exec sudo "$0" "$@"
 fi
 
-# `<gl-crystal intensity=0.94>`Install required dependencies`</gl-crystal>`
-echo -e "${BLUE}💫 Installing quantum dependencies...${NC}"
-pacman -Syu --noconfirm
-pacman -S --needed --noconfirm \
-    zig \
-    fish \
-    git \
-    base-devel \
-    cmake \
-    llvm \
-    clang \
-    lld
+# `<gl-azure shimmer=0.94>`Install base dependencies first`</gl-azure>`
+echo -e "${BLUE}💫 Installing core dependencies...${NC}"
+pacman -Syu --noconfirm || handle_error "System update failed"
+pacman -S --needed --noconfirm zig || handle_error "Failed to install Zig"
+
+# `<gl-prism color="quantum-azure">`Initialize dependency checking`</gl-prism>`
+echo -e "${BLUE}💫 Verifying quantum dependencies...${NC}"
+
+# Create temporary Zig script for dependency checking
+cat > check_deps.zig << 'EOL'
+const std = @import("std");
+const deps = @import("src/core/system/dependencies.zig");
+
+pub fn main() !void {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var dep_manager = try deps.DependencyManager.init(gpa.allocator());
+    defer dep_manager.deinit();
+
+    try dep_manager.checkDependencies();
+
+    const stdout = std.io.getStdOut().writer();
+
+    // Install missing dependencies
+    for (dep_manager.status_list.items) |pkg| {
+        if (!pkg.installed) {
+            try stdout.print("Installing {s}...\n", .{pkg.name});
+            const result = try std.ChildProcess.exec(.{
+                .allocator = gpa.allocator(),
+                .argv = &[_][]const u8{ "pacman", "-S", "--needed", "--noconfirm", pkg.name },
+            });
+            defer {
+                gpa.allocator().free(result.stdout);
+                gpa.allocator().free(result.stderr);
+            }
+            if (result.term.Exited != 0) {
+                try stdout.print("Failed to install {s}\n", .{pkg.name});
+                return error.InstallationFailed;
+            }
+        }
+    }
+}
+EOL
+
+# Compile and run dependency checker
+echo -e "${CYAN}✨ Compiling dependency checker...${NC}"
+zig build-exe check_deps.zig -I src/ || handle_error "Failed to compile dependency checker"
+./check_deps || handle_error "Dependency installation failed"
 
 # `<gl-shimmer intensity=0.92>`Create quantum configuration directory`</gl-shimmer>`
 echo -e "${CYAN}✨ Creating quantum configuration space...${NC}"
