@@ -31,7 +31,82 @@ mkdir -p $plasmoid_path/{contents/{ui,config},data}
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-[Rest of the QML content...]
+echo 'import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import org.kde.plasma.plasmoid
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components as PlasmaComponents
+
+PlasmoidItem {
+    id: root
+
+    property var glimmerColors: ["#00ffff", "#ffd700", "#4169e1", "#50c878"]
+    property int glimmerIndex: 0
+    property bool quantumProtection: true
+
+    switchWidth: units.gridUnit * 10
+    switchHeight: units.gridUnit * 10
+
+    Layout.minimumWidth: units.gridUnit * 12
+    Layout.minimumHeight: units.gridUnit * 12
+    Layout.preferredWidth: units.gridUnit * 14
+    Layout.preferredHeight: units.gridUnit * 14
+
+    compactRepresentation: PlasmaCore.IconItem {
+        source: "security-high"
+        active: mouseArea.containsMouse
+
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: root.expanded = !root.expanded
+        }
+    }
+
+    fullRepresentation: Item {
+        id: fullRep
+
+        PlasmaCore.FrameSvgItem {
+            id: frame
+            anchors.fill: parent
+            imagePath: "widgets/background"
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: frame.margins.left
+                spacing: units.smallSpacing
+
+                PlasmaComponents.Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "✨ STARGUARD"
+                    font.pixelSize: theme.defaultFont.pixelSize * 1.5
+                    font.bold: true
+
+                    PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.NormalColorGroup
+                    color: root.glimmerColors[root.glimmerIndex]
+
+                    NumberAnimation on color {
+                        from: root.glimmerColors[root.glimmerIndex]
+                        to: root.glimmerColors[(root.glimmerIndex + 1) % 4]
+                        duration: 2000
+                        running: true
+                        loops: Animation.Infinite
+                        onFinished: root.glimmerIndex = (root.glimmerIndex + 1) % 4
+                    }
+                }
+
+                PlasmaComponents.Button {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: root.quantumProtection ? "🛡️ Protection Active" : "⚠️ Protection Inactive"
+                    icon.name: root.quantumProtection ? "security-high" : "security-low"
+                    onClicked: root.quantumProtection = !root.quantumProtection
+                }
+            }
+        }
+    }
+}' > $main_qml
 
 # `<gl-shimmer color="#ffd700">`Enhanced log monitoring`</gl-shimmer>`
 function monitor_plasma_logs
