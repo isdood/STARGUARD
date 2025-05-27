@@ -64,4 +64,4 @@ Contributions are welcome! Please read our contributing guidelines before gettin
 
 ## 📄 License
 
-[License Type] - See LICENSE file for details
+[GNU] - See LICENSE file for details
