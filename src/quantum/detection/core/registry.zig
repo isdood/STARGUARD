@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Pattern Registry
 //! Version: 0.13.0
-//! Last Modified: 2025-05-26 22:42:34 UTC
+//! Last Modified: 2025-05-27 08:00:42 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -57,7 +57,7 @@ pub const Registry = struct {
         var iterator = self.patterns.iterator();
 
         while (iterator.next()) |stored| {
-            const coherence = try self.comparePatterns(pattern, stored.value_ptr.data);
+            const coherence = comparePatterns(pattern, stored.value_ptr.data);
             max_coherence = @max(max_coherence, coherence);
         }
 
@@ -65,17 +65,12 @@ pub const Registry = struct {
     }
 
     /// 💠 Compare quantum patterns
-    fn comparePatterns(self: *Self, a: []const f64, b: []const f64) !f64 {
-        try glimmer.setOptimization(.pattern_align);
-
-        if (a.len != b.len) {
-            return error.PatternMismatch;
-        }
+    fn comparePatterns(a: []const f64, b: []const f64) f64 {
+        if (a.len != b.len) return 0;
 
         var coherence: f64 = 0;
         for (a, 0..) |value, i| {
             const diff = value - b[i];
-            // Using std.math.absFloat instead of @fabs
             coherence += 1.0 - std.math.absFloat(diff);
         }
 
