@@ -14,157 +14,68 @@ end
 
 echo $QUANTUM_CYAN"✨ Initializing STARWEAVE quantum stabilization matrix..."$QUANTUM_RESET
 
-# `<gl-crystal color="#4169e1">`Verify Plasma 6 environment`</gl-crystal>`
-if not command -sq plasmashell
-    handle_error "Plasma quantum core not detected"
-    exit 1
-end
-
-# `<gl-shimmer color="#ffd700">`Install required frameworks`</gl-shimmer>`
+# `<gl-crystal color="#4169e1">`Verify and install Plasma meta packages`</gl-crystal>`
 echo $STARWEAVE_GOLD"🌟 Harmonizing quantum framework dependencies..."$QUANTUM_RESET
 
-# Create temporary package list
-set -l pkg_file (mktemp)
-pacman -Qq > $pkg_file
+set -l required_packages \
+    plasma-meta \
+    plasma-workspace \
+    plasma-framework6-git \
+    qt6-declarative \
+    extra-cmake-modules \
+    kpackage
 
-for pkg in plasma-framework plasma-framework6
-    if not grep -q "^$pkg\$" $pkg_file
-        echo $GLIMMER_BLUE"💫 Attempting to install $pkg..."$QUANTUM_RESET
-        sudo pacman -S --needed $pkg
-        if test $status -ne 0
-            echo $STARWEAVE_GOLD"🌟 Checking AUR for $pkg..."$QUANTUM_RESET
-            if command -sq yay
-                yay -S --needed $pkg
-            end
-        end
-    end
+# First check for plasma-meta
+if not pacman -Qi plasma-meta > /dev/null 2>&1
+    echo $GLIMMER_BLUE"💫 Installing Plasma quantum framework..."$QUANTUM_RESET
+    sudo pacman -S --needed plasma-meta
 end
-rm $pkg_file
 
-# `<gl-crystal color="#4169e1">`Ensure proper directory structure`</gl-crystal>`
+# Try installing from AUR if available
+if command -sq yay
+    echo $STARWEAVE_GOLD"🌟 Checking AUR for quantum frameworks..."$QUANTUM_RESET
+    yay -S --needed plasma-framework6-git
+else
+    echo $GLIMMER_BLUE"💫 Note: yay not found, skipping AUR quantum matrix..."$QUANTUM_RESET
+end
+
+# `<gl-shimmer color="#ffd700">`Ensure proper Plasma 6 paths`</gl-shimmer>`
 set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
 mkdir -p $plasmoid_path/{contents/{ui,config},data}
 
-# `<gl-shimmer color="#ffd700">`Update QML with enhanced Plasma 6 compatibility`</gl-shimmer>`
-set -l main_qml $plasmoid_path/contents/ui/main.qml
-echo $GLIMMER_BLUE"💫 Stabilizing quantum interface matrix..."$QUANTUM_RESET
+[Previous QML content remains the same...]
 
-echo 'import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls
-import org.kde.plasma.plasmoid
-import org.kde.plasma.core as PlasmaCore
-import org.kde.plasma.components as PlasmaComponents
+# `<gl-crystal color="#4169e1">`Enhanced service registration`</gl-crystal>`
+set -l services_paths \
+    ~/.local/share/kservices6 \
+    ~/.local/share/plasma/plasmoids
 
-PlasmoidItem {
-    id: root
+for path in $services_paths
+    mkdir -p $path
+    echo $GLIMMER_BLUE"💫 Creating quantum service path: $path"$QUANTUM_RESET
+end
 
-    property var glimmerColors: ["#00ffff", "#ffd700", "#4169e1", "#50c878"]
-    property int glimmerIndex: 0
-    property bool quantumProtection: true
+# `<gl-shimmer color="#00ffff">`Register plasmoid in both locations`</gl-shimmer>`
+for path in $services_paths
+    set -l target_path $path/org.kde.starguard
+    echo $STARWEAVE_GOLD"🌟 Registering quantum service in: $path"$QUANTUM_RESET
+    ln -sf $plasmoid_path $target_path
+end
 
-    switchWidth: units.gridUnit * 10
-    switchHeight: units.gridUnit * 10
-
-    Layout.minimumWidth: units.gridUnit * 12
-    Layout.minimumHeight: units.gridUnit * 12
-    Layout.preferredWidth: units.gridUnit * 14
-    Layout.preferredHeight: units.gridUnit * 14
-
-    compactRepresentation: PlasmaCore.IconItem {
-        source: "security-high"
-        active: mouseArea.containsMouse
-
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: root.expanded = !root.expanded
-        }
-    }
-
-    fullRepresentation: Item {
-        id: fullRep
-
-        PlasmaCore.FrameSvgItem {
-            id: frame
-            anchors.fill: parent
-            imagePath: "widgets/background"
-
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: frame.margins.left
-                spacing: units.smallSpacing
-
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "✨ STARGUARD"
-                    font.pixelSize: theme.defaultFont.pixelSize * 1.5
-                    font.bold: true
-
-                    PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.NormalColorGroup
-                    color: root.glimmerColors[root.glimmerIndex]
-
-                    NumberAnimation on color {
-                        from: root.glimmerColors[root.glimmerIndex]
-                        to: root.glimmerColors[(root.glimmerIndex + 1) % 4]
-                        duration: 2000
-                        running: true
-                        loops: Animation.Infinite
-                        onFinished: root.glimmerIndex = (root.glimmerIndex + 1) % 4
-                    }
-                }
-
-                PlasmaComponents.Button {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: root.quantumProtection ? "🛡️ Protection Active" : "⚠️ Protection Inactive"
-                    icon.name: root.quantumProtection ? "security-high" : "security-low"
-                    onClicked: root.quantumProtection = !root.quantumProtection
-                }
-            }
-        }
-    }
-}' > $main_qml
-
-# `<gl-crystal color="#4169e1">`Update service registration`</gl-crystal>`
-set -l services_path ~/.local/share/kservices6
-mkdir -p $services_path
-
-set -l desktop_file $services_path/plasma-applet-org.kde.starguard.desktop
-echo $STARWEAVE_GOLD"🌟 Registering quantum service matrix..."$QUANTUM_RESET
-
-echo '[Desktop Entry]
-Name=STARGUARD Quantum Protection
-Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
-Type=Service
-ServiceTypes=Plasma/Applet
-Icon=security-high
-X-Plasma-API=declarativeappletscript
-X-Plasma-MainScript=ui/main.qml
-X-KDE-PluginInfo-Name=org.kde.starguard
-X-KDE-PluginInfo-Category=System Services
-X-KDE-PluginInfo-Author=@isdood
-X-KDE-PluginInfo-Email=isdood@quantum.guard
-X-KDE-PluginInfo-Version=0.13.0
-X-KDE-PluginInfo-Website=https://github.com/isdood/STARGUARD
-X-KDE-PluginInfo-License=MIT
-X-KDE-ServiceTypes=Plasma/Applet
-X-KDE-FormFactors=tablet,handset,desktop
-X-KDE-PluginInfo-EnabledByDefault=true
-X-Plasma-NotificationAreaCategory=SystemServices' > $desktop_file
-
-# `<gl-shimmer color="#ffd700">`Safe cache clearing`</gl-shimmer>`
+# `<gl-crystal color="#4169e1">`Safe cache purging`</gl-crystal>`
 echo $QUANTUM_CYAN"✨ Purging quantum cache matrix..."$QUANTUM_RESET
-for cache_dir in ~/.cache/{plasma*,plasmashell,ksycoca6,kbuildsycoca6}
-    if test -e $cache_dir
-        rm -rf $cache_dir
+for cache_dir in plasma* plasmashell ksycoca6 kbuildsycoca6
+    set -l cache_path ~/.cache/$cache_dir
+    if test -d $cache_path
+        rm -rf $cache_path
     end
 end
 
-# `<gl-crystal color="#4169e1">`Rebuild Plasma cache`</gl-crystal>`
-kbuildsycoca6 --noincremental
+# `<gl-shimmer color="#ffd700">`Rebuild and restart`</gl-shimmer>`
+if command -sq kbuildsycoca6
+    kbuildsycoca6 --noincremental
+end
 
-# `<gl-shimmer color="#ffd700">`Safely restart Plasma`</gl-shimmer>`
 echo $GLIMMER_BLUE"💫 Would you like to restart the Plasma quantum matrix? (y/N)"$QUANTUM_RESET
 read -l confirm
 if test "$confirm" = "y" -o "$confirm" = "Y"
@@ -173,7 +84,8 @@ if test "$confirm" = "y" -o "$confirm" = "Y"
         killall plasmashell
     end
     sleep 3
-    nohup plasmashell --replace > /dev/null 2>&1 &
+    # `<gl-crystal color="#4169e1">`Use nohup to prevent shell interference`</gl-crystal>`
+    nohup plasmashell --no-respawn > /dev/null 2>&1 &
     disown
 end
 
@@ -181,8 +93,22 @@ echo $STARWEAVE_GOLD"
 ╔════════════════════════════════════╗
 ║     QUANTUM MATRIX STABILIZED      ║
 ╠════════════════════════════════════╣
-║ 🌟 Framework: ENHANCED            ║
+║ 🌟 Framework: HARMONIZED          ║
 ║ 💫 QML: PLASMA 6 ALIGNED         ║
-║ ✨ Cache: HARMONIZED             ║
+║ ✨ Cache: PURGED                  ║
 ║ 🎇 Service: QUANTUM READY        ║
-╚════════════════════════════════════╝"$QUANTUM_RESET
+╚════════════════════════════════════╝
+
+💫 Next steps if widget doesn't appear:
+1. Install 'plasma-meta' package manually:
+   sudo pacman -S plasma-meta
+
+2. Check Plasma installation:
+   pacman -Qs plasma
+
+3. Verify QML installation:
+   ls -la $plasmoid_path/contents/ui/main.qml
+
+4. Monitor Plasma logs:
+   journalctl -f | grep plasma
+"$QUANTUM_RESET
