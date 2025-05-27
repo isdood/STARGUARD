@@ -1,0 +1,187 @@
+.
+├── 001-DOCS.fish
+├── 002-API-1.fish
+├── 002-API-2.fish
+├── 002-API-3.fish
+├── 003-ARCH-1.fish
+├── 003-ARCH-2.fish
+├── 003-ARCH-3.fish
+├── 004-DEVELOPMENT-1.fish
+├── 004-DEVELOPMENT-2.fish
+├── 004-DEVELOPMENT-3.fish
+├── 004-DEVELOPMENT-4.fish
+├── 005-GUIDES-1.fish
+├── 005-GUIDES-2.fish
+├── 005-GUIDES-3.fish
+├── 006-INTEGRATION-1.fish
+├── 006-INTEGRATION-2.fish
+├── 006-INTEGRATION-3.fish
+├── 006-INTEGRATION-4.fish
+├── 007-QUANTUM-1.fish
+├── 007-QUANTUM-2.fish
+├── 007-QUANTUM-3.fish
+├── 007-QUANTUM-4.fish
+├── 008-TECHNICAL-1.fish
+├── 008-TECHNICAL-2.fish
+├── 008-TECHNICAL-3.fish
+├── 008-TECHNICAL-4.fish
+├── 009-IGNITION.fish
+├── 010-QUANTUM-DETECTION.fish
+├── 011-PLASMA-FRONTEND.fish
+├── build.zig
+├── check_deps.o
+├── contents
+│   └── ui
+│       └── main.qml
+├── docs
+│   ├── api
+│   │   ├── authentication.md
+│   │   ├── endpoints.md
+│   │   ├── examples
+│   │   │   └── README.md
+│   │   ├── examples.md
+│   │   └── README.md
+│   ├── architecture
+│   │   ├── overview.md
+│   │   ├── quantum-components.md
+│   │   ├── README.md
+│   │   └── system-design.md
+│   ├── development
+│   │   ├── README.md
+│   │   ├── setup.md
+│   │   ├── testing.md
+│   │   └── workflow.md
+│   ├── guides
+│   │   ├── building.md
+│   │   ├── contribution.md
+│   │   ├── getting-started.md
+│   │   └── README.md
+│   ├── integration
+│   │   ├── glimmer.md
+│   │   ├── README.md
+│   │   ├── soundqr.md
+│   │   └── starweb.md
+│   ├── quantum
+│   │   ├── future-proofing.md
+│   │   ├── implementation.md
+│   │   ├── README.md
+│   │   └── theory.md
+│   ├── README.md
+│   └── technical
+│       ├── pattern-recognition.md
+│       ├── quantum-algorithms.md
+│       ├── README.md
+│       └── threat-detection.md
+├── install.sh
+├── libs
+│   └── glimmer
+│       └── src
+│           ├── main.zig
+│           ├── quantum
+│           │   ├── adaptive.zig
+│           │   ├── ainf.zig
+│           │   ├── amplify.zig
+│           │   ├── balance.zig
+│           │   ├── beck_chevalley.zig
+│           │   ├── braid.zig
+│           │   ├── cartan.zig
+│           │   ├── cascade.zig
+│           │   ├── cohomology.zig
+│           │   ├── collapse.zig
+│           │   ├── correction.zig
+│           │   ├── dgalgebra.zig
+│           │   ├── dimensions.zig
+│           │   ├── enhancement.zig
+│           │   ├── entangle.zig
+│           │   ├── evolution.zig
+│           │   ├── fmatrix.zig
+│           │   ├── frobenius_reciprocity.zig
+│           │   ├── fusion.zig
+│           │   ├── hamiltonian.zig
+│           │   ├── harmony.zig
+│           │   ├── interference.zig
+│           │   ├── linf.zig
+│           │   ├── mate_correspondence.zig
+│           │   ├── modulate.zig
+│           │   ├── mutation.zig
+│           │   ├── nambu.zig
+│           │   ├── neural.zig
+│           │   ├── phase.zig
+│           │   ├── poisson.zig
+│           │   ├── prediction.zig
+│           │   ├── restriction.zig
+│           │   ├── rmatrix.zig
+│           │   ├── spectral.zig
+│           │   ├── surface.zig
+│           │   ├── teleport.zig
+│           │   ├── toric.zig
+│           │   ├── transfer.zig
+│           │   ├── verschiebung.zig
+│           │   └── yangbaxter.zig
+│           └── test.zig
+├── LICENSE
+├── package.json
+├── README.md
+├── src
+│   ├── core
+│   │   ├── config
+│   │   │   └── settings.zig
+│   │   ├── engine
+│   │   │   └── core.zig
+│   │   ├── quantum.zig
+│   │   └── system
+│   │       ├── collector.zig
+│   │       ├── dependencies.zig
+│   │       └── init.zig
+│   ├── main.zig
+│   ├── pattern
+│   │   ├── analysis
+│   │   │   └── processor.zig
+│   │   ├── matcher
+│   │   │   └── engine.zig
+│   │   └── recognition
+│   │       └── detector.zig
+│   ├── quantum
+│   │   ├── algorithms
+│   │   │   └── quantum_ops.zig
+│   │   ├── detection
+│   │   │   ├── analyzers
+│   │   │   │   ├── anomaly.zig
+│   │   │   │   ├── behavior.zig
+│   │   │   │   ├── correlation.zig
+│   │   │   │   └── signature.zig
+│   │   │   ├── core
+│   │   │   │   ├── detector.zig
+│   │   │   │   ├── metrics.zig
+│   │   │   │   ├── registry.zig
+│   │   │   │   └── state.zig
+│   │   │   └── patterns
+│   │   │       ├── coherence.zig
+│   │   │       ├── entanglement.zig
+│   │   │       ├── interference.zig
+│   │   │       └── superposition.zig
+│   │   ├── entangle
+│   │   │   └── manager.zig
+│   │   └── state
+│   │       └── quantum_state.zig
+│   ├── root.zig
+│   ├── threat
+│   │   ├── detection
+│   │   │   └── analyzer.zig
+│   │   └── response
+│   │       └── handler.zig
+│   └── utils
+├── starguard.service
+├── tests
+│   ├── core
+│   ├── pattern
+│   ├── quantum
+│   │   └── quantum_test.zig
+│   └── threat
+├── tree.txt
+├── warning.png
+└── zig-out
+    └── bin
+        └── starguard
+
+44 directories, 141 files
