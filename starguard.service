@@ -1,0 +1,28 @@
+[Unit]
+Description=STARGUARD Quantum Protection System
+Documentation=https://github.com/isdood/STARGUARD
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/starguard --collect-mode
+Restart=always
+RestartSec=10
+Nice=-5
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=80
+
+# Security enhancements
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+RestrictRealtime=true
+RestrictNamespaces=true
+
+[Install]
+WantedBy=multi-user.target
