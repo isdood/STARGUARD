@@ -39,7 +39,7 @@ pub const System = struct {
     pub fn init(allocator: std.mem.Allocator) !Self {
         try glimmer.setOptimization(.quantum_calibrate);
 
-        var quantum_matrix = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
+        const quantum_matrix = try allocator.alloc(f64, root.Settings.Quantum.max_entanglement);
         errdefer allocator.free(quantum_matrix);
 
         for (quantum_matrix) |*cell| {
@@ -67,7 +67,7 @@ pub const System = struct {
             self.allocator.free(matrix);
         }
 
-        var new_matrix = try self.allocator.alloc(f64, root.Settings.Glimmer.matrix_size);
+        const new_matrix = try self.allocator.alloc(f64, root.Settings.Glimmer.matrix_size);
         errdefer self.allocator.free(new_matrix);
 
         for (new_matrix) |*cell| {
