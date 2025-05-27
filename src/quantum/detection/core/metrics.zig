@@ -1,6 +1,6 @@
 //! ✨ STARGUARD Quantum Metrics
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 08:02:50 UTC
+//! Last Modified: 2025-05-27 08:05:09 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -39,7 +39,7 @@ pub const Metrics = struct {
     pub fn recordDetection(self: *Self, pattern: []const f64) !void {
         try glimmer.setOptimization(.pattern_align);
 
-        const pattern_hash = try self.calculatePatternHash(pattern);
+        const pattern_hash = calculatePatternHash(pattern);
         const entry = try self.pattern_counts.getOrPut(pattern_hash);
 
         if (!entry.found_existing) {
@@ -56,9 +56,7 @@ pub const Metrics = struct {
     }
 
     /// 💠 Calculate pattern hash
-    fn calculatePatternHash(self: *Self, pattern: []const f64) !u64 {
-        try glimmer.setOptimization(.quantum_measure);
-
+    fn calculatePatternHash(pattern: []const f64) u64 {
         var hasher = std.hash.Wyhash.init(0);
         for (pattern) |value| {
             const bytes = std.mem.asBytes(&value);
