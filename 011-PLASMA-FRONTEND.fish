@@ -2,7 +2,7 @@
 
 # ✨ STARGUARD Plasma Frontend Initialization
 # Version: 0.13.0
-# Last Modified: 2025-05-27 10:59:28 UTC
+# Last Modified: 2025-05-27 11:01:57 UTC
 # Author: @isdood
 # Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -48,8 +48,7 @@ end
 set -l metadata_file ~/.local/share/plasma/plasmoids/org.kde.starguard/metadata.desktop
 echo $BLUE"💫 Creating quantum plasmoid metadata..."$NC
 
-cat > $metadata_file << EOL
-[Desktop Entry]
+echo '[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
@@ -67,15 +66,13 @@ X-KDE-PluginInfo-EnabledByDefault=true
 
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
-X-Plasma-StandAloneApp=true
-EOL
+X-Plasma-StandAloneApp=true' > $metadata_file
 
 # `<gl-crystal color="plasma-azure">`Create main QML interface`</gl-crystal>`
 set -l main_qml ~/.local/share/plasma/plasmoids/org.kde.starguard/contents/ui/main.qml
 echo $CYAN"✨ Generating quantum interface matrix..."$NC
 
-cat > $main_qml << 'EOL'
-import QtQuick 2.15
+echo 'import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -115,15 +112,13 @@ Item {
             // Add more UI components here
         }
     }
-}
-EOL
+}' > $main_qml
 
 # `<gl-prism color="plasma-blue">`Create configuration UI`</gl-prism>`
 set -l config_qml ~/.local/share/plasma/plasmoids/org.kde.starguard/contents/config/config.qml
 echo $GOLD"🌟 Establishing quantum configuration interface..."$NC
 
-cat > $config_qml << 'EOL'
-import QtQuick 2.15
+echo 'import QtQuick 2.15
 import QtQuick 2.15 as QtQuick
 import org.kde.plasma.configuration 2.0
 
@@ -138,8 +133,7 @@ ConfigModel {
          icon: "security-high"
          source: "configProtection.qml"
     }
-}
-EOL
+}' > $config_qml
 
 # `<gl-shimmer color="plasma-gold">`Register plasmoid service`</gl-shimmer>`
 set -l service_file ~/.local/share/kservices5/plasma-applet-org.kde.starguard.desktop
