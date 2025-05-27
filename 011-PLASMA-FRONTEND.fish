@@ -149,7 +149,42 @@ ln -sf $metadata_file $service_file
 
 # `<gl-prism color="glimmer-blue" intensity=0.97>`Harmonize Plasma cache`</gl-prism>`
 echo $QUANTUM_CYAN"✨ Harmonizing quantum cache matrix..."$QUANTUM_RESET
-kbuildsycoca5 --noincremental
+
+# Try different KDE build tools
+if command -sq kbuildsycoca6
+    kbuildsycoca6 --noincremental
+else if command -sq kbuildsycoca5
+    kbuildsycoca5 --noincremental
+else if command -sq kbuildsycoca
+    kbuildsycoca --noincremental
+else
+    echo $STARWEAVE_GOLD"🌟 Notice: Quantum cache harmonization skipped"$QUANTUM_RESET
+    echo $GLIMMER_BLUE"💫 Manual plasmashell refresh may be required"$QUANTUM_RESET
+
+    # `<gl-crystal intensity=0.96>`Attempt alternative quantum synchronization`</gl-crystal>`
+    if command -sq plasmashell
+        echo $QUANTUM_CYAN"✨ Attempting quantum resonance via plasmashell..."$QUANTUM_RESET
+        set -l current_time (date +%s)
+        touch ~/.config/starguard/plasma/last_sync_$current_time
+
+        # Optional: Attempt to refresh plasmashell (only if user confirms)
+        echo $STARWEAVE_GOLD"🌟 Would you like to refresh the Plasma shell? (y/N)"$QUANTUM_RESET
+        read -l confirm
+        if test "$confirm" = "y" -o "$confirm" = "Y"
+            echo $GLIMMER_BLUE"💫 Initiating quantum shell refresh..."$QUANTUM_RESET
+            plasmashell --replace & disown
+        end
+    end
+end
+
+# `<gl-shimmer color="quantum-gold" intensity=0.98>`Verify plasmoid registration`</gl-shimmer>`
+if test -d ~/.local/share/plasma
+    # Force update desktop database
+    if command -sq update-desktop-database
+        echo $GLIMMER_BLUE"💫 Synchronizing quantum desktop matrix..."$QUANTUM_RESET
+        update-desktop-database ~/.local/share/applications
+    end
+end
 
 # `<gl-crystal color="starweave-azure" intensity=0.98>`Verify quantum installation`</gl-crystal>`
 if test -f $metadata_file; and test -f $main_qml; and test -f $config_qml
