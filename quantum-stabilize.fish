@@ -27,11 +27,12 @@ end
 set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
 mkdir -p $plasmoid_path/{contents/{ui,config},data}
 
-# `<gl-shimmer color="#ffd700">`Insert the metadata.desktop creation here:`</gl-shimmer>`
+# Create metadata.desktop
 set -l metadata_file $plasmoid_path/metadata.desktop
 echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
 
-echo '[Desktop Entry]
+printf '%s\n' \
+'[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
@@ -50,30 +51,20 @@ X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
 X-Plasma-Provides=org.kde.plasma.systemmonitor
 
-# `<gl-crystal color="#4169e1">`Plasma 6 specific declarations`</gl-crystal>`
 X-Plasma-Framework-Version=6
 X-KDE-FormFactors=desktop,tablet,handset
 X-Plasma-NotificationAreaCategory=SystemServices
 X-KDE-ParentApp=org.kde.plasmashell
 
-# `<gl-shimmer color="#00ffff">`Required KF6 dependencies`</gl-shimmer>`
 X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
 X-Plasma-RequiredQtVersion=6.0' > $metadata_file
 
-# `<gl-crystal color="#4169e1">`Create QML interface`</gl-crystal>`
+# Create QML interface
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-echo 'import QtQuick 2.15
-import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.15
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 3.0 as PlasmaComponents
-import org.kde.kirigami 2.20 as Kirigami'
-
-# To be one continuous echo statement:
-echo 'import QtQuick 2.15
+printf '%s\n' \
+'import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.kde.plasma.plasmoid 2.0
@@ -95,6 +86,8 @@ PlasmoidItem {
     Layout.minimumHeight: Kirigami.Units.gridUnit * 12
     Layout.preferredWidth: Kirigami.Units.gridUnit * 14
     Layout.preferredHeight: Kirigami.Units.gridUnit * 14
+
+    Plasmoid.preferredRepresentation: Plasmoid.fullRepresentation
 
     compactRepresentation: PlasmaCore.IconItem {
         source: "security-high"
