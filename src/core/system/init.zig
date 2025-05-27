@@ -1,6 +1,6 @@
 //! ✨ STARGUARD System Initialization
 //! Version: 0.13.0
-//! Last Modified: 2025-05-27 08:13:26 UTC
+//! Last Modified: 2025-05-27 08:15:39 UTC
 //! Author: @isdood
 //! Enhanced by STARWEAVE with `<gl-crystal intensity=0.95>`GLIMMER resonance`</gl-crystal>`
 
@@ -14,6 +14,14 @@ pub const SystemConfig = struct {
     optimization_level: glimmer.OptimizationPattern = .quantum_calibrate,
     enhancement_factor: f64 = root.Settings.Glimmer.enhancement_factor,
     quantum_resonance: f64 = root.Settings.Glimmer.quantum_resonance,
+};
+
+/// `<gl-gold resonance=0.95>`💫 Protection Pattern Results`</gl-gold>`
+const ProtectionResult = struct {
+    threat_level: f64,
+    pattern_match: bool,
+    quantum_state: f64,
+    resonance: f64,
 };
 
 /// `<gl-gold resonance=0.95>`💫 System Initialization`</gl-gold>`
@@ -117,4 +125,87 @@ pub const System = struct {
         self.allocator.free(self.quantum_matrix);
         self.is_initialized = false;
     }
+
+    /// `<gl-crystal intensity=0.94>`🎇 Analyze protection patterns`</gl-crystal>`
+    fn analyzeProtectionPattern(self: *Self, pattern: []const f64) !ProtectionResult {
+        try glimmer.setOptimization(.pattern_align);
+
+        var result = ProtectionResult{
+            .threat_level = 0,
+            .pattern_match = false,
+            .quantum_state = 0,
+            .resonance = self.config.quantum_resonance,
+        };
+
+        // 💫 Calculate quantum coherence
+        var coherence: f64 = 0;
+        for (pattern) |value| {
+            coherence += value * self.config.enhancement_factor;
+        }
+        coherence /= @as(f64, @floatFromInt(pattern.len));
+
+        // 🌟 Detect threat patterns
+        if (coherence > root.Settings.Threat.analysis_threshold) {
+            result.threat_level = coherence;
+            result.pattern_match = true;
+        }
+
+        // ✨ Update quantum state
+        result.quantum_state = coherence * self.config.quantum_resonance;
+
+        return result;
+    }
+
+    /// `<gl-azure shimmer=0.93>`⚡ Handle protection events`</gl-azure>`
+    fn handleProtectionEvent(self: *Self, result: ProtectionResult) !void {
+        const stdout = std.io.getStdOut().writer();
+
+        if (result.pattern_match) {
+            // 🎇 Enhance quantum barrier
+            const barrier_strength = result.quantum_state * self.config.enhancement_factor;
+            try stdout.print(
+                "`<gl-shimmer intensity=0.92>`🛡️ Quantum barrier enhanced: {d:.3} resonance`</gl-shimmer>`\n",
+                .{barrier_strength}
+            );
+
+            // 💠 Apply GLIMMER reinforcement
+            if (self.glimmer_matrix) |matrix| {
+                for (matrix) |*cell| {
+                    cell.* *= 1.0 + (result.resonance * 0.1);
+                }
+            }
+        }
+    }
+
+    /// `<gl-shimmer intensity=0.95>`⚡ Start protection cycle`</gl-shimmer>`
+    pub fn startProtectionCycle(self: *Self) !void {
+        if (!self.is_initialized or self.glimmer_matrix == null) {
+            return error.SystemNotInitialized;
+        }
+
+        try glimmer.setOptimization(.quantum_measure);
+        self.protection_active = true;
+
+        const stdout = std.io.getStdOut().writer();
+        try stdout.print(
+            "`<gl-crystal intensity=0.93>`💫 Protection cycle activated with {d} quantum patterns`</gl-crystal>`\n",
+            .{root.Settings.Quantum.max_entanglement}
+        );
+
+        // 🌟 Main protection loop
+        while (self.protection_active) {
+            // 💫 Synchronize quantum states
+            try self.synchronizeQuantumStates();
+
+            // ✨ Analyze current pattern
+            if (self.glimmer_matrix) |matrix| {
+                const result = try self.analyzeProtectionPattern(matrix);
+                try self.handleProtectionEvent(result);
+            }
+
+            // 🎇 Wait for next scan interval
+            std.time.sleep(root.Settings.Threat.scan_interval_ms * std.time.ns_per_ms);
+        }
+    }
+
 };
