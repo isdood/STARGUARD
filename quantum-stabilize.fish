@@ -48,7 +48,34 @@ mkdir -p $plasmoid_path/{contents/{ui,config},data}
 set -l metadata_file $plasmoid_path/metadata.desktop
 echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
 
-cat > $metadata_file << 'EOF'
+echo '[Desktop Entry]
+Name=STARGUARD Quantum Protection
+Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
+Type=Service
+ServiceTypes=Plasma/Applet
+Icon=security-high
+
+X-KDE-PluginInfo-Name=org.kde.starguard
+X-KDE-PluginInfo-Category=System Services
+X-KDE-PluginInfo-Author=@isdood
+X-KDE-PluginInfo-Email=isdood@quantum.guard
+X-KDE-PluginInfo-Version=0.13.0
+X-KDE-PluginInfo-Website=https://github.com/isdood/STARGUARD
+X-KDE-PluginInfo-License=MIT
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-Provides=org.kde.plasma.systemmonitor
+
+X-Plasma-Framework-Version=6
+X-KDE-FormFactors=desktop,tablet,handset
+X-Plasma-NotificationAreaCategory=SystemServices
+X-KDE-ParentApp=org.kde.plasmashell
+
+X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
+X-Plasma-RequiredQtVersion=6.0' > $metadata_file
+
 [Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
@@ -85,14 +112,14 @@ verify_file_contents $metadata_file 500 || exit 1
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-cat > $main_qml << 'EOF'
-import QtQuick 2.15
+echo 'import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
+> $main_qml
 
 PlasmoidItem {
     id: root
