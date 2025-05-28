@@ -40,6 +40,12 @@ if test -d $PLASMOID_PATH
     end
 end
 
+# Ensure the directory is removed before proceeding
+if test -d $PLASMOID_PATH
+    handle_error "Failed to remove existing installation"
+    exit 1
+end
+
 # `<gl-shimmer color="#50c878,#ffd700">`Create fresh installation directory`</gl-shimmer>`
 echo "$GLIMMER_BLUE💫 Initiating clean quantum installation...$QUANTUM_RESET"
 
