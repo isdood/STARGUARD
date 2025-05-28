@@ -25,9 +25,17 @@ echo "$QUANTUM_CYAN✨ STARWEAVE quantum matrix initialization...$QUANTUM_RESET"
 echo "$GLIMMER_BLUE💫 Purging quantum residuals...$QUANTUM_RESET"
 
 if test -d $PLASMOID_PATH
-    rm -rf $PLASMOID_PATH
-    or begin
-        handle_error "Failed to remove existing installation"
+    echo "$STARWEAVE_GOLD🌟 Existing plasmoid directory detected: $PLASMOID_PATH$QUANTUM_RESET"
+    echo "$STARWEAVE_GOLD🌟 Would you like to remove the existing plasmoid directory? (y/N)$QUANTUM_RESET"
+    read -l confirm
+    if test "$confirm" = "y" -o "$confirm" = "Y"
+        rm -rf $PLASMOID_PATH
+        or begin
+            handle_error "Failed to remove existing installation"
+            exit 1
+        end
+    else
+        echo "$VOID_RED❌ Quantum disruption: Installation aborted by user$QUANTUM_RESET"
         exit 1
     end
 end
