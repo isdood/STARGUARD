@@ -7,76 +7,14 @@ set -l GLIMMER_BLUE (set_color -o blue)
 set -l VOID_RED (set_color -o red)
 set -l QUANTUM_RESET (set_color normal)
 
-function handle_error
-    echo $VOID_RED"❌ Quantum disruption: $argv[1]"$QUANTUM_RESET
-    return 1
-end
+[Previous functions remain the same...]
 
-function verify_file_contents
-    set -l file $argv[1]
-    set -l expected_size $argv[2]
-
-    if test -f $file
-        set -l actual_size (stat -f %z $file 2>/dev/null; or stat -c %s $file 2>/dev/null)
-        if test $actual_size -lt $expected_size
-            handle_error "File $file appears empty or corrupted"
-            return 1
-        end
-    else
-        handle_error "File $file does not exist"
-        return 1
-    end
-    return 0
-end
-
-echo $QUANTUM_CYAN"✨ Initializing STARWEAVE quantum stabilization matrix..."$QUANTUM_RESET
-
-# `<gl-crystal color="#4169e1">`Verify and install Plasma meta packages`</gl-crystal>`
-echo $STARWEAVE_GOLD"🌟 Harmonizing quantum framework dependencies..."$QUANTUM_RESET
-
-# Check for plasma-meta
-if not pacman -Qi plasma-meta > /dev/null 2>&1
-    echo $GLIMMER_BLUE"💫 Installing Plasma quantum framework..."$QUANTUM_RESET
-    sudo pacman -S --needed plasma-meta plasma-workspace qt6-declarative extra-cmake-modules kpackage
-end
-
-# `<gl-shimmer color="#ffd700">`Ensure proper Plasma 6 paths`</gl-shimmer>`
-set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
-mkdir -p $plasmoid_path/{contents/{ui,config},data}
-
-# `<gl-crystal color="#4169e1">`Create metadata.desktop`</gl-crystal>`
+# `<gl-crystal color="#4169e1">`Create metadata.desktop - FIXED: removed duplicate`</gl-crystal>`
 set -l metadata_file $plasmoid_path/metadata.desktop
 echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
 
-echo '[Desktop Entry]
-Name=STARGUARD Quantum Protection
-Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
-Type=Service
-ServiceTypes=Plasma/Applet
-Icon=security-high
-
-X-KDE-PluginInfo-Name=org.kde.starguard
-X-KDE-PluginInfo-Category=System Services
-X-KDE-PluginInfo-Author=@isdood
-X-KDE-PluginInfo-Email=isdood@quantum.guard
-X-KDE-PluginInfo-Version=0.13.0
-X-KDE-PluginInfo-Website=https://github.com/isdood/STARGUARD
-X-KDE-PluginInfo-License=MIT
-X-KDE-PluginInfo-EnabledByDefault=true
-
-X-Plasma-API=declarativeappletscript
-X-Plasma-MainScript=ui/main.qml
-X-Plasma-Provides=org.kde.plasma.systemmonitor
-
-X-Plasma-Framework-Version=6
-X-KDE-FormFactors=desktop,tablet,handset
-X-Plasma-NotificationAreaCategory=SystemServices
-X-KDE-ParentApp=org.kde.plasmashell
-
-X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
-X-Plasma-RequiredQtVersion=6.0' > $metadata_file
-
-echo '[Desktop Entry]
+printf '%s\n' \
+'[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
@@ -107,11 +45,12 @@ X-Plasma-RequiredQtVersion=6.0' > $metadata_file
 # Verify metadata file
 verify_file_contents $metadata_file 500 || exit 1
 
-# `<gl-crystal color="#4169e1">`Create QML interface`</gl-crystal>`
+# `<gl-crystal color="#4169e1">`Create QML interface - FIXED: proper string handling`</gl-crystal>`
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-echo 'import QtQuick 2.15
+printf '%s\n' \
+'import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -176,7 +115,7 @@ PlasmoidItem {
             }
         }
     }
-}
+}' > $main_qml
 EOF
 
 # Verify QML file
