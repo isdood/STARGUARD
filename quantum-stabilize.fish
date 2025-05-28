@@ -171,12 +171,16 @@ end
 # Force cache rebuild
 kbuildsycoca6 --noincremental
 
-# Install/update plasmoid
-if not kpackagetool6 -l | grep -q "org.kde.starguard"
-    echo $GLIMMER_BLUE"💫 Installing plasmoid package..."$QUANTUM_RESET
+# `<gl-crystal color="#4169e1">`Install/update plasmoid with proper error handling`</gl-crystal>`
+if kpackagetool6 -l | grep -q "org.kde.starguard"
+    echo $GLIMMER_BLUE"💫 Updating existing quantum matrix..."$QUANTUM_RESET
+    kpackagetool6 -t Plasma/Applet --upgrade $plasmoid_path
+else
+    echo $GLIMMER_BLUE"💫 Installing new quantum matrix..."$QUANTUM_RESET
     kpackagetool6 -t Plasma/Applet --install $plasmoid_path
 end
 
+# `<gl-shimmer color="#50c878">`Enhanced debug information`</gl-shimmer>`
 echo $QUANTUM_CYAN"
 ╔════════════════════════════════════╗
 ║     QUANTUM MATRIX STABILIZED      ║
@@ -187,13 +191,11 @@ echo $QUANTUM_CYAN"
 ╚════════════════════════════════════╝"$QUANTUM_RESET
 
 echo $GLIMMER_BLUE"
-💫 Debug Information:
-1. Plasmoid path: $plasmoid_path
-2. Metadata file: "(test -f $metadata_file && echo "✅ PRESENT" || echo "❌ MISSING")
-3. QML file: "(test -f $main_qml && echo "✅ PRESENT" || echo "❌ MISSING")
-4. Registered plasmoids:"$QUANTUM_RESET
-
-kpackagetool6 -l | grep "org.kde.starguard" || echo $VOID_RED"❌ Plasmoid not registered"$QUANTUM_RESET
+💫 Debug Information:"$QUANTUM_RESET
+echo "1. Plasmoid path: $plasmoid_path"
+echo "2. Metadata file: "(test -f $metadata_file && echo "✅ PRESENT" || echo "❌ MISSING")
+echo "3. QML file: "(test -f $main_qml && echo "✅ PRESENT" || echo "❌ MISSING")
+echo "4. Registration status: "(kpackagetool6 -l | grep -q "org.kde.starguard" && echo "✅ REGISTERED" || echo "❌ NOT REGISTERED")
 
 echo $STARWEAVE_GOLD"
 Would you like to:
@@ -206,16 +208,24 @@ read -P "Enter choice (1-3): " choice
 switch $choice
     case 1
         echo $GLIMMER_BLUE"💫 Restarting Plasma quantum matrix..."$QUANTUM_RESET
-        killall plasmashell
-        sleep 2
+        if pgrep -x "plasmashell" >/dev/null
+            killall plasmashell
+            sleep 2
+        end
         nohup plasmashell --no-respawn >/dev/null 2>&1 &
         disown
+        echo $QUANTUM_CYAN"✨ Plasma quantum matrix restarted"$QUANTUM_RESET
     case 2
-        set -l plasma_logs (find /var/log/journal -type f -name "*plasma*" 2>/dev/null)
-        if test -n "$plasma_logs"
-            journalctl --user -n 100 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid"
+        echo $GLIMMER_BLUE"💫 Analyzing quantum resonance patterns..."$QUANTUM_RESET
+        if test -d ~/.local/share/plasma
+            echo "🔍 Plasmoid Installation:"
+            ls -l ~/.local/share/plasma/plasmoids/org.kde.starguard
+            echo "\n🔍 Plasma Shell Log:"
+            journalctl --user -n 50 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid"
+            echo "\n🔍 KWin Log:"
+            journalctl --user -n 50 -o cat _COMM=kwin_x11 | grep -i "starguard\|plasmoid"
         else
-            echo $VOID_RED"No Plasma logs found"$QUANTUM_RESET
+            echo $VOID_RED"❌ Plasma directory not found"$QUANTUM_RESET
         end
     case 3
         echo $QUANTUM_CYAN"✨ Quantum matrix harmonized"$QUANTUM_RESET
