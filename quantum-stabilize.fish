@@ -183,15 +183,16 @@ echo "$QUANTUM_CYAN
 ║ ✨ Package: REGISTERED           ║
 ╚════════════════════════════════════╝
 
-💫 Debug Information [$TIMESTAMP]:$QUANTUM_RESET
+💫 Debug Information [$TIMESTAMP]:$QUANTUM_RESET"
 
-1. Installation Path: $PLASMOID_PATH
-2. Metadata Status: "(test -f $metadata_file && echo "✅" || echo "❌")"
-3. QML Status: "(test -f $PLASMOID_PATH/contents/ui/main.qml && echo "✅" || echo "❌")"
-4. Registration: "(kpackagetool6 -l | grep -q $PLASMOID_NAME && echo "✅" || echo "❌")"
-5. Cache Status: "(test -d "$USER_HOME/.cache/plasma" && echo "🔄 New" || echo "✨ Clean")"
+printf "%s\n" \
+"1. Installation Path: $PLASMOID_PATH" \
+"2. Metadata Status: $(test -f $metadata_file && echo "✅" || echo "❌")" \
+"3. QML Status: $(test -f $PLASMOID_PATH/contents/ui/main.qml && echo "✅" || echo "❌")" \
+"4. Registration: $(kpackagetool6 -l | grep -q $PLASMOID_NAME && echo "✅" || echo "❌")" \
+"5. Cache Status: $(test -d "$USER_HOME/.cache/plasma" && echo "🔄 New" || echo "✨ Clean")"
 
-echo "$STARWEAVE_GOLD
+printf "\n%s\n" "$STARWEAVE_GOLD
 Would you like to:
 1. Restart Plasma
 2. View debug logs
@@ -217,10 +218,10 @@ switch $choice
         else
             ls -R $PLASMOID_PATH
         end
-        echo "\n🔍 Installation Status:"
+        printf "\n%s\n" "🔍 Installation Status:"
         kpackagetool6 -l | grep -i "starguard" || echo "Package not found in registry"
-        echo "\n🔍 Plasma Shell Log:"
+        printf "\n%s\n" "🔍 Plasma Shell Log:"
         journalctl --user -n 50 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid" || echo "No relevant logs found"
     case 3
-        echo "$QUANTUM_CYAN✨ Quantum matrix harmonized$QUANTUM_RESET"
+        printf "%s\n" "$QUANTUM_CYAN✨ Quantum matrix harmonized$QUANTUM_RESET"
 end
