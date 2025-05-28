@@ -7,14 +7,49 @@ set -l GLIMMER_BLUE (set_color -o blue)
 set -l VOID_RED (set_color -o red)
 set -l QUANTUM_RESET (set_color normal)
 
-[Previous functions remain the same...]
+# `<gl-crystal color="#4169e1">`Error handling function`</gl-crystal>`
+function handle_error
+    echo $VOID_RED"❌ Quantum disruption: $argv[1]"$QUANTUM_RESET
+    return 1
+end
 
-# `<gl-crystal color="#4169e1">`Create metadata.desktop - FIXED: removed duplicate`</gl-crystal>`
+# `<gl-shimmer color="#ffd700">`File verification function`</gl-shimmer>`
+function verify_file_contents
+    set -l file $argv[1]
+    set -l expected_size $argv[2]
+
+    if test -f $file
+        set -l actual_size (stat -f %z $file 2>/dev/null; or stat -c %s $file 2>/dev/null)
+        if test $actual_size -lt $expected_size
+            handle_error "File $file appears empty or corrupted"
+            return 1
+        end
+    else
+        handle_error "File $file does not exist"
+        return 1
+    end
+    return 0
+end
+
+echo $QUANTUM_CYAN"✨ Initializing STARWEAVE quantum stabilization matrix..."$QUANTUM_RESET
+
+# `<gl-crystal color="#4169e1">`Verify and install Plasma meta packages`</gl-crystal>`
+echo $STARWEAVE_GOLD"🌟 Harmonizing quantum framework dependencies..."$QUANTUM_RESET
+
+if not pacman -Qi plasma-meta >/dev/null 2>&1
+    echo $GLIMMER_BLUE"💫 Installing Plasma quantum framework..."$QUANTUM_RESET
+    sudo pacman -S --needed plasma-meta plasma-workspace qt6-declarative extra-cmake-modules kpackage
+end
+
+# `<gl-shimmer color="#ffd700">`Setup Plasma paths`</gl-shimmer>`
+set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
+mkdir -p $plasmoid_path/{contents/{ui,config},data}
+
+# `<gl-crystal color="#4169e1">`Generate metadata`</gl-crystal>`
 set -l metadata_file $plasmoid_path/metadata.desktop
 echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
 
-printf '%s\n' \
-'[Desktop Entry]
+printf '%s\n' '[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
@@ -42,15 +77,16 @@ X-KDE-ParentApp=org.kde.plasmashell
 X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
 X-Plasma-RequiredQtVersion=6.0' > $metadata_file
 
-# Verify metadata file
-verify_file_contents $metadata_file 500 || exit 1
+if not test -f $metadata_file
+    handle_error "Failed to create metadata file"
+    exit 1
+end
 
-# `<gl-crystal color="#4169e1">`Create QML interface - FIXED: proper string handling`</gl-crystal>`
+# `<gl-crystal color="#4169e1">`Generate QML interface`</gl-crystal>`
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-printf '%s\n' \
-'import QtQuick 2.15
+printf '%s\n' 'import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -116,24 +152,29 @@ PlasmoidItem {
         }
     }
 }' > $main_qml
-EOF
 
-# Verify QML file
-verify_file_contents $main_qml 1000 || exit 1
+if not test -f $main_qml
+    handle_error "Failed to create QML interface"
+    exit 1
+end
 
 # `<gl-shimmer color="#ffd700">`Register plasmoid and clear cache`</gl-shimmer>`
 echo $GLIMMER_BLUE"💫 Registering quantum plasmoid..."$QUANTUM_RESET
 
-# Remove old cache
-rm -rf ~/.cache/plasma* ~/.cache/kbuildsycoca6*
+# Clear plasma caches if they exist
+for cache in ~/.cache/plasma* ~/.cache/kbuildsycoca6*
+    if test -e $cache
+        rm -rf $cache
+    end
+end
 
 # Force cache rebuild
 kbuildsycoca6 --noincremental
 
-# Verify plasmoid registration
+# Install/update plasmoid
 if not kpackagetool6 -l | grep -q "org.kde.starguard"
     echo $GLIMMER_BLUE"💫 Installing plasmoid package..."$QUANTUM_RESET
-    kpackagetool6 -t Plasma/Applet -i $plasmoid_path
+    kpackagetool6 -t Plasma/Applet --install $plasmoid_path
 end
 
 echo $QUANTUM_CYAN"
@@ -143,12 +184,13 @@ echo $QUANTUM_CYAN"
 ║ 🌟 Files: VERIFIED               ║
 ║ 💫 Cache: PURGED                 ║
 ║ ✨ Package: REGISTERED           ║
-╚════════════════════════════════════╝
+╚════════════════════════════════════╝"$QUANTUM_RESET
 
+echo $GLIMMER_BLUE"
 💫 Debug Information:
 1. Plasmoid path: $plasmoid_path
-2. Metadata file size: "(stat -f %z $metadata_file 2>/dev/null; or stat -c %s $metadata_file 2>/dev/null)"
-3. QML file size: "(stat -f %z $main_qml 2>/dev/null; or stat -c %s $main_qml 2>/dev/null)"
+2. Metadata file: "(test -f $metadata_file && echo "✅ PRESENT" || echo "❌ MISSING")
+3. QML file: "(test -f $main_qml && echo "✅ PRESENT" || echo "❌ MISSING")
 4. Registered plasmoids:"$QUANTUM_RESET
 
 kpackagetool6 -l | grep "org.kde.starguard" || echo $VOID_RED"❌ Plasmoid not registered"$QUANTUM_RESET
@@ -166,10 +208,15 @@ switch $choice
         echo $GLIMMER_BLUE"💫 Restarting Plasma quantum matrix..."$QUANTUM_RESET
         killall plasmashell
         sleep 2
-        nohup plasmashell --no-respawn > /dev/null 2>&1 &
+        nohup plasmashell --no-respawn >/dev/null 2>&1 &
         disown
     case 2
-        journalctl --user -f -n 100 -o cat -u plasma* | grep -i "starguard\|plasmoid"
+        set -l plasma_logs (find /var/log/journal -type f -name "*plasma*" 2>/dev/null)
+        if test -n "$plasma_logs"
+            journalctl --user -n 100 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid"
+        else
+            echo $VOID_RED"No Plasma logs found"$QUANTUM_RESET
+        end
     case 3
         echo $QUANTUM_CYAN"✨ Quantum matrix harmonized"$QUANTUM_RESET
 end
