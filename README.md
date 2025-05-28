@@ -26,7 +26,7 @@ STARGUARD is pioneering the next generation of system protection by combining qu
 - [ ] Implementation of quantum-aware detection algorithms
 - [ ] Self-learning pattern recognition
 - [ ] Integration with system monitoring
-- [ ] Advanced STARBURN security feedback loop
+- [ ] Advanced STARBURN security feedback loop, testing quantum-enhanced password & hash solving
 
 ### Phase 3: Integration
 - [ ] STARWEB QR-Code integration for signature distribution
