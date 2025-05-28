@@ -41,6 +41,27 @@ if not pacman -Qi plasma-meta >/dev/null 2>&1
     sudo pacman -S --needed plasma-meta plasma-workspace qt6-declarative extra-cmake-modules kpackage
 end
 
+# `<gl-shimmer color="#ffd700,#00ffff">`Clean up existing installation`</gl-shimmer>`
+echo $GLIMMER_BLUE"💫 Purging quantum residuals..."$QUANTUM_RESET
+
+# Remove circular symlink and old installation
+if test -L $plasmoid_path/org.kde.starguard
+    rm $plasmoid_path/org.kde.starguard
+end
+
+# Force uninstall if exists
+if kpackagetool6 -l | grep -q "org.kde.starguard"
+    echo $GLIMMER_BLUE"💫 Removing existing quantum matrix..."$QUANTUM_RESET
+    kpackagetool6 -t Plasma/Applet --remove org.kde.starguard
+end
+
+# `<gl-crystal color="#4169e1,#50c878">`Clean installation`</gl-crystal>`
+echo $GLIMMER_BLUE"💫 Initiating clean quantum installation..."$QUANTUM_RESET
+
+# Ensure clean state
+rm -rf $plasmoid_path
+mkdir -p $plasmoid_path/{contents/{ui,config},data}
+
 # `<gl-shimmer color="#ffd700">`Setup Plasma paths`</gl-shimmer>`
 set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
 mkdir -p $plasmoid_path/{contents/{ui,config},data}
@@ -158,44 +179,47 @@ if not test -f $main_qml
     exit 1
 end
 
-# `<gl-shimmer color="#ffd700">`Register plasmoid and clear cache`</gl-shimmer>`
+# `<gl-shimmer color="#50c878,#ffd700">`Register fresh plasmoid`</gl-shimmer>`
 echo $GLIMMER_BLUE"💫 Registering quantum plasmoid..."$QUANTUM_RESET
 
-# Clear plasma caches if they exist
-for cache in ~/.cache/plasma* ~/.cache/kbuildsycoca6*
-    if test -e $cache
-        rm -rf $cache
-    end
-end
+# Clear ALL plasma caches
+rm -rf ~/.cache/plasma* ~/.cache/kbuildsycoca6* ~/.cache/plasmashell* 2>/dev/null
 
-# Force cache rebuild
+# Force cache rebuild and wait
 kbuildsycoca6 --noincremental
+sleep 2
 
-# `<gl-crystal color="#4169e1">`Install/update plasmoid with proper error handling`</gl-crystal>`
-if kpackagetool6 -l | grep -q "org.kde.starguard"
-    echo $GLIMMER_BLUE"💫 Updating existing quantum matrix..."$QUANTUM_RESET
-    kpackagetool6 -t Plasma/Applet --upgrade $plasmoid_path
-else
-    echo $GLIMMER_BLUE"💫 Installing new quantum matrix..."$QUANTUM_RESET
-    kpackagetool6 -t Plasma/Applet --install $plasmoid_path
+# Fresh installation
+echo $GLIMMER_BLUE"💫 Installing quantum matrix..."$QUANTUM_RESET
+if not kpackagetool6 -t Plasma/Applet --install $plasmoid_path
+    handle_error "Failed to install quantum plasmoid"
+    exit 1
 end
 
-# `<gl-shimmer color="#50c878">`Enhanced debug information`</gl-shimmer>`
+# Verify installation
+if not kpackagetool6 -l | grep -q "org.kde.starguard"
+    handle_error "Quantum plasmoid not registered properly"
+    exit 1
+end
+
+# `<gl-crystal color="#ffd700,#4169e1">`Enhanced debug information with timestamps`</gl-crystal>`
 echo $QUANTUM_CYAN"
 ╔════════════════════════════════════╗
 ║     QUANTUM MATRIX STABILIZED      ║
 ╠════════════════════════════════════╣
-║ 🌟 Files: VERIFIED               ║
-║ 💫 Cache: PURGED                 ║
-║ ✨ Package: REGISTERED           ║
+║ 🌟 Files: VERIFIED                 ║
+║ 💫 Cache: PURGED                   ║
+║ ✨ Package: REGISTERED             ║
 ╚════════════════════════════════════╝"$QUANTUM_RESET
 
+set current_time (date "+%Y-%m-%d %H:%M:%S")
 echo $GLIMMER_BLUE"
-💫 Debug Information:"$QUANTUM_RESET
+💫 Debug Information [$current_time]:"$QUANTUM_RESET
 echo "1. Plasmoid path: $plasmoid_path"
 echo "2. Metadata file: "(test -f $metadata_file && echo "✅ PRESENT" || echo "❌ MISSING")
 echo "3. QML file: "(test -f $main_qml && echo "✅ PRESENT" || echo "❌ MISSING")
 echo "4. Registration status: "(kpackagetool6 -l | grep -q "org.kde.starguard" && echo "✅ REGISTERED" || echo "❌ NOT REGISTERED")
+echo "5. Install location: "(readlink -f $plasmoid_path)
 
 echo $STARWEAVE_GOLD"
 Would you like to:
@@ -217,16 +241,14 @@ switch $choice
         echo $QUANTUM_CYAN"✨ Plasma quantum matrix restarted"$QUANTUM_RESET
     case 2
         echo $GLIMMER_BLUE"💫 Analyzing quantum resonance patterns..."$QUANTUM_RESET
-        if test -d ~/.local/share/plasma
-            echo "🔍 Plasmoid Installation:"
-            ls -l ~/.local/share/plasma/plasmoids/org.kde.starguard
-            echo "\n🔍 Plasma Shell Log:"
-            journalctl --user -n 50 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid"
-            echo "\n🔍 KWin Log:"
-            journalctl --user -n 50 -o cat _COMM=kwin_x11 | grep -i "starguard\|plasmoid"
-        else
-            echo $VOID_RED"❌ Plasma directory not found"$QUANTUM_RESET
-        end
+        echo "🔍 Plasmoid Structure:"
+        tree $plasmoid_path
+        echo "\n🔍 Metadata Contents:"
+        cat $metadata_file
+        echo "\n🔍 Plasma Shell Log:"
+        journalctl --user -n 50 -o cat _COMM=plasmashell | grep -i "starguard\|plasmoid" || echo "No relevant logs found"
+        echo "\n🔍 Installation Status:"
+        kpackagetool6 -l | grep -i "starguard" || echo "Package not found in registry"
     case 3
         echo $QUANTUM_CYAN"✨ Quantum matrix harmonized"$QUANTUM_RESET
 end
