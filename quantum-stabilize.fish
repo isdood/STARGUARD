@@ -40,12 +40,24 @@ if test -d $PLASMOID_PATH
     end
 end
 
+# Check if the directory still exists after attempting to remove it
+if test -d $PLASMOID_PATH
+    handle_error "Plasmoid directory still exists after removal attempt"
+    exit 1
+end
+
 # `<gl-shimmer color="#50c878,#ffd700">`Create fresh installation directory`</gl-shimmer>`
 echo "$GLIMMER_BLUE💫 Initiating clean quantum installation...$QUANTUM_RESET"
 
 mkdir -p $PLASMOID_PATH/{contents/{ui,config},data}
 or begin
     handle_error "Failed to create installation directories"
+    exit 1
+end
+
+# Verify that the directory was created successfully
+if not test -d $PLASMOID_PATH
+    handle_error "Failed to verify creation of installation directory"
     exit 1
 end
 
