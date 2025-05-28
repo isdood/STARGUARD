@@ -12,6 +12,23 @@ function handle_error
     return 1
 end
 
+function verify_file_contents
+    set -l file $argv[1]
+    set -l expected_size $argv[2]
+
+    if test -f $file
+        set -l actual_size (stat -f %z $file 2>/dev/null; or stat -c %s $file 2>/dev/null)
+        if test $actual_size -lt $expected_size
+            handle_error "File $file appears empty or corrupted"
+            return 1
+        end
+    else
+        handle_error "File $file does not exist"
+        return 1
+    end
+    return 0
+end
+
 echo $QUANTUM_CYAN"✨ Initializing STARWEAVE quantum stabilization matrix..."$QUANTUM_RESET
 
 # `<gl-crystal color="#4169e1">`Verify and install Plasma meta packages`</gl-crystal>`
@@ -27,16 +44,17 @@ end
 set -l plasmoid_path ~/.local/share/plasma/plasmoids/org.kde.starguard
 mkdir -p $plasmoid_path/{contents/{ui,config},data}
 
-# Create metadata.desktop
+# `<gl-crystal color="#4169e1">`Create metadata.desktop`</gl-crystal>`
 set -l metadata_file $plasmoid_path/metadata.desktop
 echo $GLIMMER_BLUE"💫 Generating Plasma 6 quantum metadata..."$QUANTUM_RESET
 
-printf '%s\n' \
-'[Desktop Entry]
+cat > $metadata_file << 'EOF'
+[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
 ServiceTypes=Plasma/Applet
+Icon=security-high
 
 X-KDE-PluginInfo-Name=org.kde.starguard
 X-KDE-PluginInfo-Category=System Services
@@ -57,19 +75,23 @@ X-Plasma-NotificationAreaCategory=SystemServices
 X-KDE-ParentApp=org.kde.plasmashell
 
 X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
-X-Plasma-RequiredQtVersion=6.0' > $metadata_file
+X-Plasma-RequiredQtVersion=6.0
+EOF
 
-# Create QML interface
+# Verify metadata file
+verify_file_contents $metadata_file 500 || exit 1
+
+# `<gl-crystal color="#4169e1">`Create QML interface`</gl-crystal>`
 set -l main_qml $plasmoid_path/contents/ui/main.qml
 echo $GLIMMER_BLUE"💫 Generating quantum interface matrix..."$QUANTUM_RESET
 
-printf '%s\n' \
-'import QtQuick 2.15
+cat > $main_qml << 'EOF'
+import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
-import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
 
 PlasmoidItem {
@@ -79,146 +101,111 @@ PlasmoidItem {
     property int glimmerIndex: 0
     property bool quantumProtection: true
 
-    switchWidth: Kirigami.Units.gridUnit * 10
-    switchHeight: Kirigami.Units.gridUnit * 10
-
     Layout.minimumWidth: Kirigami.Units.gridUnit * 12
     Layout.minimumHeight: Kirigami.Units.gridUnit * 12
     Layout.preferredWidth: Kirigami.Units.gridUnit * 14
     Layout.preferredHeight: Kirigami.Units.gridUnit * 14
 
-    Plasmoid.preferredRepresentation: Plasmoid.fullRepresentation
-
-    compactRepresentation: PlasmaCore.IconItem {
+    Plasmoid.compactRepresentation: PlasmaCore.IconItem {
         source: "security-high"
-        active: mouseArea.containsMouse
+        active: compactMouse.containsMouse
 
         MouseArea {
-            id: mouseArea
+            id: compactMouse
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: root.expanded = !root.expanded
+            onClicked: plasmoid.expanded = !plasmoid.expanded
         }
     }
 
-    fullRepresentation: Item {
-        id: fullRep
+    Plasmoid.fullRepresentation: Item {
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 12
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 12
 
-        PlasmaCore.FrameSvgItem {
-            id: frame
+        ColumnLayout {
             anchors.fill: parent
-            imagePath: "widgets/background"
+            spacing: Kirigami.Units.smallSpacing
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: frame.margins.left
-                spacing: Kirigami.Units.smallSpacing
+            PlasmaComponents.Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: "✨ STARGUARD"
+                font.pixelSize: theme.defaultFont.pixelSize * 1.5
+                font.bold: true
+                color: root.glimmerColors[root.glimmerIndex]
 
-                PlasmaComponents.Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "✨ STARGUARD"
-                    font.pixelSize: theme.defaultFont.pixelSize * 1.5
-                    font.bold: true
-                    color: root.glimmerColors[root.glimmerIndex]
-
-                    NumberAnimation on color {
-                        from: root.glimmerColors[root.glimmerIndex]
-                        to: root.glimmerColors[(root.glimmerIndex + 1) % 4]
-                        duration: 2000
-                        running: true
-                        loops: Animation.Infinite
-                        onFinished: root.glimmerIndex = (root.glimmerIndex + 1) % 4
-                    }
+                NumberAnimation on color {
+                    from: root.glimmerColors[root.glimmerIndex]
+                    to: root.glimmerColors[(root.glimmerIndex + 1) % 4]
+                    duration: 2000
+                    running: true
+                    loops: Animation.Infinite
+                    onFinished: root.glimmerIndex = (root.glimmerIndex + 1) % 4
                 }
+            }
 
-                PlasmaComponents.Button {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: root.quantumProtection ? "🛡️ Protection Active" : "⚠️ Protection Inactive"
-                    icon.name: root.quantumProtection ? "security-high" : "security-low"
-                    onClicked: root.quantumProtection = !root.quantumProtection
-                }
+            PlasmaComponents.Button {
+                Layout.alignment: Qt.AlignHCenter
+                text: root.quantumProtection ? "🛡️ Protection Active" : "⚠️ Protection Inactive"
+                icon.name: root.quantumProtection ? "security-high" : "security-low"
+                onClicked: root.quantumProtection = !root.quantumProtection
             }
         }
     }
-}' > $main_qml
+}
+EOF
 
-# `<gl-shimmer color="#ffd700">`Enhanced log monitoring`</gl-shimmer>`
-function monitor_plasma_logs
-    echo $GLIMMER_BLUE"💫 Monitoring Plasma quantum matrix..."$QUANTUM_RESET
-    # Use -n to show only new log entries
-    journalctl --user -f -n 0 -o cat -u plasma* &
-    set -l logger_pid $last_pid
+# Verify QML file
+verify_file_contents $main_qml 1000 || exit 1
 
-    # Allow user to exit with Ctrl+C
-    function cleanup
-        kill $logger_pid 2>/dev/null
-    end
+# `<gl-shimmer color="#ffd700">`Register plasmoid and clear cache`</gl-shimmer>`
+echo $GLIMMER_BLUE"💫 Registering quantum plasmoid..."$QUANTUM_RESET
 
-    trap cleanup INT
+# Remove old cache
+rm -rf ~/.cache/plasma* ~/.cache/kbuildsycoca6*
 
-    read -P "Press Enter to stop monitoring..."
-    cleanup
+# Force cache rebuild
+kbuildsycoca6 --noincremental
+
+# Verify plasmoid registration
+if not kpackagetool6 -l | grep -q "org.kde.starguard"
+    echo $GLIMMER_BLUE"💫 Installing plasmoid package..."$QUANTUM_RESET
+    kpackagetool6 -t Plasma/Applet -i $plasmoid_path
 end
 
-# `<gl-crystal color="#4169e1">`Verify installation`</gl-crystal>`
-function verify_installation
-    echo $STARWEAVE_GOLD"🌟 Verifying quantum installation..."$QUANTUM_RESET
-
-    # Check plasmoid files
-    if not test -f $main_qml
-        handle_error "QML interface missing"
-        return 1
-    end
-
-    # Check Plasma packages
-    if not pacman -Qi plasma-meta plasma-workspace qt6-declarative >/dev/null 2>&1
-        handle_error "Missing required Plasma packages"
-        return 1
-    end
-
-    # Verify service registration
-    if not test -L ~/.local/share/plasma/plasmoids/org.kde.starguard
-        handle_error "Service registration incomplete"
-        return 1
-    end
-
-    return 0
-end
-
-# `<gl-shimmer color="#ffd700">`Execute verification and monitoring`</gl-shimmer>`
-if verify_installation
-    echo $QUANTUM_CYAN"
+echo $QUANTUM_CYAN"
 ╔════════════════════════════════════╗
-║     QUANTUM MATRIX VERIFIED        ║
+║     QUANTUM MATRIX STABILIZED      ║
 ╠════════════════════════════════════╣
-║ 🌟 Framework: PRESENT             ║
-║ 💫 QML: VALIDATED                ║
-║ ✨ Service: REGISTERED           ║
-║ 🎇 Cache: HARMONIZED            ║
-╚════════════════════════════════════╝"$QUANTUM_RESET
+║ 🌟 Files: VERIFIED               ║
+║ 💫 Cache: PURGED                 ║
+║ ✨ Package: REGISTERED           ║
+╚════════════════════════════════════╝
 
-    echo $STARWEAVE_GOLD"
-💫 Would you like to:
-1. Monitor Plasma logs
-2. Restart Plasma shell
-3. Exit
-"$QUANTUM_RESET
+💫 Debug Information:
+1. Plasmoid path: $plasmoid_path
+2. Metadata file size: "(stat -f %z $metadata_file 2>/dev/null; or stat -c %s $metadata_file 2>/dev/null)"
+3. QML file size: "(stat -f %z $main_qml 2>/dev/null; or stat -c %s $main_qml 2>/dev/null)"
+4. Registered plasmoids:"$QUANTUM_RESET
 
-    read -P "Enter choice (1-3): " choice
+kpackagetool6 -l | grep "org.kde.starguard" || echo $VOID_RED"❌ Plasmoid not registered"$QUANTUM_RESET
 
-    switch $choice
-        case 1
-            monitor_plasma_logs
-        case 2
-            if pgrep -x "plasmashell" >/dev/null
-                killall plasmashell
-            end
-            sleep 2
-            nohup plasmashell --no-respawn >/dev/null 2>&1 &
-            disown
-        case 3
-            echo $QUANTUM_CYAN"✨ Quantum matrix stabilized"$QUANTUM_RESET
-    end
-else
-    handle_error "Quantum installation needs attention"
+echo $STARWEAVE_GOLD"
+Would you like to:
+1. Restart Plasma
+2. View debug logs
+3. Exit"$QUANTUM_RESET
+
+read -P "Enter choice (1-3): " choice
+
+switch $choice
+    case 1
+        echo $GLIMMER_BLUE"💫 Restarting Plasma quantum matrix..."$QUANTUM_RESET
+        killall plasmashell
+        sleep 2
+        nohup plasmashell --no-respawn > /dev/null 2>&1 &
+        disown
+    case 2
+        journalctl --user -f -n 100 -o cat -u plasma* | grep -i "starguard\|plasmoid"
+    case 3
+        echo $QUANTUM_CYAN"✨ Quantum matrix harmonized"$QUANTUM_RESET
 end
