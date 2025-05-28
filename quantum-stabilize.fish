@@ -76,7 +76,7 @@ X-KDE-ParentApp=org.kde.plasmashell
 X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
 X-Plasma-RequiredQtVersion=6.0' > $metadata_file
 
-[Desktop Entry]
+echo '[Desktop Entry]
 Name=STARGUARD Quantum Protection
 Comment=✨ A cutting-edge, quantum-powered sentinel for your PC
 Type=Service
@@ -102,8 +102,7 @@ X-Plasma-NotificationAreaCategory=SystemServices
 X-KDE-ParentApp=org.kde.plasmashell
 
 X-Plasma-RequiredKF6Dependencies=declarative,plasma-framework
-X-Plasma-RequiredQtVersion=6.0
-EOF
+X-Plasma-RequiredQtVersion=6.0' > $metadata_file
 
 # Verify metadata file
 verify_file_contents $metadata_file 500 || exit 1
@@ -119,7 +118,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.plasmoid 2.0
 import org.kde.kirigami 2.20 as Kirigami
-> $main_qml
 
 PlasmoidItem {
     id: root
